@@ -67,7 +67,11 @@ public class Game extends BasicGameState{
     }
     @Override
     public void mouseClicked(int button, int x, int y, int clickCount) {
-        //if(PlayerCastle.getUp())   PlayerCastle.shotCBall(1);
+        castleShot(redCastle);
+        castleShot(blueCastle);
+        castleShot(yellowCastle);
+        castleShot(greenCastle);
+        if(player1.getUp())   greenCastle.shotCBall(1);
         //if(PlayerCastle.getLeft()) PlayerCastle.shotCBall(3);
     }
     @Override
@@ -230,7 +234,12 @@ public class Game extends BasicGameState{
             this.updateCastleBalls();
         }
     }
-    
+    private void castleShot(PlayerCastle castle){
+        if(castle.getPlayer().getUp())     castle.shotCBall(1);        
+        if(castle.getPlayer().getDown())   castle.shotCBall(1);
+        if(castle.getPlayer().getLeft())   castle.shotCBall(1);
+        if(castle.getPlayer().getRight())  castle.shotCBall(1);
+    }
     private void initCastles() throws SlickException{
         redCastle = new PlayerCastle(0, 0, 150, 150, "Assets/RedCastle.png");
         blueCastle = new PlayerCastle(SCREEN_X - 150, 0, 150, 150, "Assets/BlueCastle.png");

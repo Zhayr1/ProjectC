@@ -55,6 +55,10 @@ public class CannonBallImpl extends Circle implements CannonBall{
     @Override
     public void disable() {
         setExploited();
+        if(this.getCenterY() < 150){
+        setInactive();
+        resetDirs();
+        }
         /*
         if(UP){
             if(this.intersects(Game.EnemyCastle2)){

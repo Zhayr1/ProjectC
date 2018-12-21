@@ -63,6 +63,9 @@ public class menu extends BasicGameState {
 
 	@Override
 	public void update(GameContainer container, StateBasedGame game, int delta) throws SlickException {
+		posX = Mouse.getX();
+		posY = -(Mouse.getY()-(int)height); // Una Maraña con las coordenadas
+		
 		if(opc==-1) {
 			container.exit();
 		} else 
@@ -72,9 +75,6 @@ public class menu extends BasicGameState {
 	public void generarBotones(Graphics g) throws SlickException {
 		title.draw(400-(title.getWidth()/2), 150-(title.getHeight()/2)); // Dibuja el titulo en funcion al centro de la imagen
 		int separacion1 = 80, separacion2 = separacion1*2;
-
-		posX = Mouse.getX();
-		posY = -(Mouse.getY()-(int)height); // Una Maraña con las coordenadas
 		
 		if((posX > posBtnX && posX < playBtn.getWidth()+posBtnX) && (posY > posBtnY && posY < playBtn.getHeight()+posBtnY)) {
 			g.drawString("Play", 500, 400);
@@ -91,6 +91,10 @@ public class menu extends BasicGameState {
 			optBtnSelect.draw(posBtnX+10, posBtnY+separacion1);
 			playBtn.draw(posBtnX, posBtnY);
 			exitBtn.draw(posBtnX, posBtnY+separacion2);
+			
+			if(ent.isMousePressed(0)) {
+				opc = 2;
+			}
 			
 		}else if((posX > posBtnX && posX < exitBtn.getWidth()+posBtnX) && (posY > posBtnY+separacion2 && posY < exitBtn.getHeight()+posBtnY+separacion2)) {
 			g.drawString("Exit", 500, 400);
@@ -111,9 +115,6 @@ public class menu extends BasicGameState {
 	}
 	
 	public void generarCoordenadas(Graphics g) {
-		posX = Mouse.getX();
-		posY = -(Mouse.getY()-600);
-		
 		g.drawString(" X= "+posX+" Y= "+posY, 90, 8);
 	}
 

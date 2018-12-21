@@ -6,7 +6,7 @@
 package ProyectCastle.Castles;
 
 
-import ProyectCastle.Game;
+import Player.Player;
 import ProyectCastle.Proyectiles.CannonBallImpl;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.geom.Rectangle;
@@ -24,17 +24,17 @@ public class PlayerCastle extends Rectangle implements Castle{
     private static int GameRound = 3;    
     private int hp,energy;
     private CannonBallImpl cannonBalls[];
-    private Image arrowUp,arrowDown,arrowLeft,arrowRight;
-    private String position;
-    private boolean bolUp,bolDown,bolLeft,bolRight;
+    private Player player;
+    private Image arrowUp,arrowDown,arrowLeft,arrowRight,castleImg;
+    private int position;
 
-    public PlayerCastle(float x, float y, float width, float height) throws SlickException {
+    public PlayerCastle(float x, float y, float width, float height,String imageSrc) throws SlickException {
         super(x, y, width, height);
         super.setWidth(castleWidth);
         super.setHeight(castleHeight);
         this.reInitCastle(x, y);
-        bolUp = bolDown = bolLeft = bolRight = false;
-        position = "none";
+        castleImg = new Image(imageSrc);
+        position = 0;
         hp = 10;
         energy = 0;
         cannonBalls = new CannonBallImpl[10];
@@ -55,6 +55,7 @@ public class PlayerCastle extends Rectangle implements Castle{
     public void nextRound() {
         if(GameRound <= 10){
             GameRound++;
+            //this.reInitCannonBalls();
         }
     }
     
@@ -70,15 +71,16 @@ public class PlayerCastle extends Rectangle implements Castle{
         return cannonBalls;
     }
     public void drawComponents(Graphics g){
+        castleImg.draw(this.getX(),this.getY());
         //Dibujar las flechas
         
         //
-        g.drawString(String.valueOf(hp), this.getX() + castleWidth/2 , this.getY() + castleHeight * 0.4f);
-        if(position.equals("TL")){
-            g.drawString("UP: "+ String.valueOf(this.getUp()), 300, 300);
-            g.drawString("DOWN: "+ String.valueOf(this.getDown()), 300, 350);
-            g.drawString("LEFT: "+ String.valueOf(this.getLeft()), 300, 400);
-            g.drawString("RIGHT: "+ String.valueOf(this.getRight()), 300, 450);
+        g.drawString(String.valueOf(hp), this.getX() + castleWidth* 0.45f , this.getY() + castleHeight * 0.45f);
+        if(position == Player.TL){
+            g.drawString("UP: "+ String.valueOf(player.getUp()), 300, 300);
+            g.drawString("DOWN: "+ String.valueOf(player.getDown()), 300, 350);
+            g.drawString("LEFT: "+ String.valueOf(player.getLeft()), 300, 400);
+            g.drawString("RIGHT: "+ String.valueOf(player.getRight()), 300, 450);
         }
     }
     public int getHp(){
@@ -90,49 +92,18 @@ public class PlayerCastle extends Rectangle implements Castle{
     public float getCastleHeight(){
         return castleHeight;
     }
-    public void setUp(){
-        bolUp = true;
-    }
-    public void setDown(){
-        bolDown = true;
-    }
-    public void setLeft(){
-        bolLeft = true;
-    }
-    public void setRight(){
-        bolRight = true;
-    }
-    public void unsetUp(){
-        bolUp = false;
-    }
-    public void unsetDown(){
-        bolDown = false;
-    }
-    public void unsetLeft(){
-        bolLeft = false;
-    }
-    public void unsetRight(){
-        bolRight = false;
-    }
-    public boolean getUp(){
-        return bolUp;
-    }
-    public boolean getDown(){
-        return bolDown;
-    }
-    public boolean getLeft(){
-        return bolLeft;
-    }
-    public boolean getRight(){
-        return bolRight;
-    }
-    public void setPosition(String pos){
-        position = pos;
-    }
-    public void reInitCastle(float x1,float y1){
+
+    private void reInitCastle(float x1,float y1){
         this.setX(x1);
         this.setY(y1);
         super.setX(x1);
         super.setY(y1);
+    }
+    public void setPlayer(Player p){
+        player = p;
+        position = p.getPosition();
+    }
+    public Player getPlayer(){
+        return player;
     }
 }

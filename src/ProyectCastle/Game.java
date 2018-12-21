@@ -5,9 +5,8 @@
  */
 package ProyectCastle;
 
-import ProyectCastle.Castles.EnemyCastle;
+import Player.Player;
 import ProyectCastle.Castles.PlayerCastle;
-import ProyectCastle.Proyectiles.CannonBallImpl;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.GameContainer;
@@ -29,10 +28,11 @@ public class Game extends BasicGameState{
     public static int SCREEN_Y = 600;
     public static float gameTime;
     public static String mousex = "",mousey = "";
-    public static PlayerCastle EnemyCastle1,EnemyCastle2,EnemyCastle3,PlayerCastle;
+    public static PlayerCastle redCastle,blueCastle,greenCastle,yellowCastle;
+    public static Player player1,player2,player3,player4;
     private static String hostPosition = "";
     private Image background;
-    private Image explt1,explt2,explt3,explt4,explt5,explt6;
+    private Image explt1;
     private static boolean bolPause = true; 
     
     
@@ -42,16 +42,16 @@ public class Game extends BasicGameState{
             System.exit(0);
 	}
         if(key == Input.KEY_UP){
-            PlayerCastle.shotCBall(1);
+            //PlayerCastle.shotCBall(1);
         }
         if(key == Input.KEY_DOWN){
-             PlayerCastle.shotCBall(2);
+             //PlayerCastle.shotCBall(2);
         }
         if(key == Input.KEY_LEFT){
-             PlayerCastle.shotCBall(3);
+             //PlayerCastle.shotCBall(3);
         }
         if(key == Input.KEY_RIGHT){
-             PlayerCastle.shotCBall(4);
+             //PlayerCastle.shotCBall(4);
         }
     }
     @Override
@@ -61,64 +61,64 @@ public class Game extends BasicGameState{
     }
     @Override
     public void mouseClicked(int button, int x, int y, int clickCount) {
-        if(PlayerCastle.getUp())   PlayerCastle.shotCBall(1);
-        if(PlayerCastle.getLeft()) PlayerCastle.shotCBall(3);
+        //if(PlayerCastle.getUp())   PlayerCastle.shotCBall(1);
+        //if(PlayerCastle.getLeft()) PlayerCastle.shotCBall(3);
     }
     @Override
     public void mouseMoved(int oldx, int oldy, int newx, int newy) {
         if(!bolPause){
             if(hostPosition == "TL"){
                 if(newx > 170 && newx < SCREEN_X && newy > 0 && newy < 160){
-                    PlayerCastle.setRight();
+                    //PlayerCastle.setRight();
                     System.out.println("SetRight");
                 }else{
-                    PlayerCastle.unsetRight();
+                    //PlayerCastle.unsetRight();
                     System.out.println("UnsetRight");
                 }
                 if(newx > 0 && newx < 200 && newy > 150 && newy < SCREEN_Y){
-                    PlayerCastle.setDown();
+                    //PlayerCastle.setDown();
                     System.out.println("Down");
                 }else{
-                    PlayerCastle.unsetDown();
+                    //PlayerCastle.unsetDown();
                 }
             }
             if(hostPosition == "TR"){
                 System.out.println("-.-");
                 if(newx > 0 && newx < SCREEN_X - 170 && newy > 450 && newy < 600){
-                    PlayerCastle.setLeft();
+                    //PlayerCastle.setLeft();
                 }else{
-                    PlayerCastle.unsetLeft();
+                    //PlayerCastle.unsetLeft();
                 }
                 if(newx > 600 && newx < 800 && newy > 0 && newy < SCREEN_Y - 170){
-                    PlayerCastle.setUp();
+                    //PlayerCastle.setUp();
                 }else{
-                    PlayerCastle.unsetUp();
+                    //PlayerCastle.unsetUp();
                 }
             }
             if(hostPosition == "BL"){
                 System.out.println("-.-");
                 if(newx > 0 && newx < SCREEN_X - 170 && newy > 450 && newy < 600){
-                    PlayerCastle.setLeft();
+                    //PlayerCastle.setLeft();
                 }else{
-                    PlayerCastle.unsetLeft();
+                    //PlayerCastle.unsetLeft();
                 }
                 if(newx > 600 && newx < 800 && newy > 0 && newy < SCREEN_Y - 170){
-                    PlayerCastle.setUp();
+                    //PlayerCastle.setUp();
                 }else{
-                    PlayerCastle.unsetUp();
+                    //PlayerCastle.unsetUp();
                 }
             }
             if(hostPosition == "BR"){
                 System.out.println("-.-");
                 if(newx > 0 && newx < SCREEN_X - 170 && newy > 450 && newy < 600){
-                    PlayerCastle.setLeft();
+                    //PlayerCastle.setLeft();
                 }else{
-                    PlayerCastle.unsetLeft();
+                    //PlayerCastle.unsetLeft();
                 }
                 if(newx > 600 && newx < 800 && newy > 0 && newy < SCREEN_Y - 170){
-                    PlayerCastle.setUp();
+                    //PlayerCastle.setUp();
                 }else{
-                    PlayerCastle.unsetUp();
+                    //PlayerCastle.unsetUp();
                 }
             }
             //Mouse position
@@ -153,7 +153,7 @@ public class Game extends BasicGameState{
         //}
     }
     private void initExplotionsImg() throws SlickException{
-        explt1 = explt2 = explt3 = explt4 = explt5 = explt6 = new Image("Assets/Explosion.png");
+        explt1 = new Image("Assets/Explosion.png");
                 
     }
     @Override
@@ -162,26 +162,33 @@ public class Game extends BasicGameState{
     }
     @Override
     public void enter(GameContainer container,StateBasedGame game)throws SlickException{
-        this.initCastles(hostPosition);
-        //inicializacion de los 4 castillos en funcion de la posicion que elija el jugador
-        //Background
-        background = new Image("Assets/BackGround.png");
-        this.initExplotionsImg();   
-        bolPause = false;
+        System.out.println("Enter stage Game");
+        player1 = new Player();
+        player1.setPosition(Integer.valueOf(hostPosition));
+        redCastle.setPlayer(player1);
     }
     @Override
     public void init(GameContainer container, StateBasedGame game) throws SlickException {
-        System.out.println("init");
+        System.out.println("initGameHere!!");
+        //inicializacion de los 4 castillos
+        redCastle = new PlayerCastle(0, 0, 150, 150, "Assets/RedCastle.png");
+        blueCastle = new PlayerCastle(SCREEN_X - 150, 0, 150, 150, "Assets/BlueCastle.png");
+        yellowCastle = new PlayerCastle(0, SCREEN_Y - 150, 150, 150, "Assets/YellowCastle.png");
+        greenCastle = new PlayerCastle(SCREEN_X - 150, SCREEN_Y - 150, 150, 150, "Assets/GreenCastle.png");
+        //Background
+        background = new Image("Assets/BackGround.png");
+        this.initExplotionsImg();   
+        bolPause = false;        
     }
     @Override
     public void render(GameContainer container, StateBasedGame game, Graphics g) throws SlickException {
         if(!bolPause){
             g.setColor(Color.white);
             background.draw(0,0);
-            PlayerCastle.drawComponents(g);
-            EnemyCastle3.drawComponents(g);
-            EnemyCastle1.drawComponents(g);
-            EnemyCastle2.drawComponents(g);
+            redCastle.drawComponents(g);
+            blueCastle.drawComponents(g);
+            yellowCastle.drawComponents(g);
+            greenCastle.drawComponents(g);
             g.drawString("Mouse X: "+mousex + "\nMouse Y: " + mousey, 5 , 25);
             renderCannonBalls(g);   
         }

@@ -45,7 +45,7 @@ public class InitGame extends BasicGameState {
     public void init(GameContainer container, StateBasedGame game) throws SlickException {
         background = new Image("Assets/MenuBackground.png");
         selectBg = new Image("Assets/SelectField.png");
-        selectImg = new Image("Assets/CastleChoose.png");
+        selectImg = new Image("Assets/BlueCastle.png");
         chooseText = new Image("Assets/ChooseText.png");
         startButton = new Image("Assets/StartButton.png");
         startButton.setAlpha(0.8f);

@@ -127,6 +127,7 @@ public class Game extends BasicGameState{
         }
     }    
     private void renderCannonBalls(Graphics g){
+        /*
         CannonBallImpl[] aux = PlayerCastle.getCBalls();
         for (int i = 0; i < PlayerCastle.getNumCBalls(); i++) {
             if(aux[i].isActive()){
@@ -141,14 +142,15 @@ public class Game extends BasicGameState{
                 }
             }
         }
+        */
     }
     private void updateCBalls(){
-        CannonBallImpl[] aux = PlayerCastle.getCBalls();    
-        for (int i = 0; i < PlayerCastle.getNumCBalls(); i++) {
-            if (aux[i].isActive()) {
-                aux[i].updatePosition();
-            }
-        }
+        //CannonBallImpl[] aux = PlayerCastle.getCBalls();    
+        //for (int i = 0; i < PlayerCastle.getNumCBalls(); i++) {
+        //    if (aux[i].isActive()) {
+        //       aux[i].updatePosition();
+        //    }
+        //}
     }
     private void initExplotionsImg() throws SlickException{
         explt1 = explt2 = explt3 = explt4 = explt5 = explt6 = new Image("Assets/Explosion.png");
@@ -192,55 +194,7 @@ public class Game extends BasicGameState{
     }
     
     private void initCastles(String pos) throws SlickException{
-        if(pos == "TL"){
-            //Inicializacion de los 4 castillos
-            //TOP LEFT
-            PlayerCastle = new EnemyCastle(0, 0, SCREEN_X, SCREEN_Y,"TL");
-            PlayerCastle.reInitCastle(0, 0);
-            PlayerCastle.setPosition("TL");
-            //TOP RIGHT
-            EnemyCastle1 = new EnemyCastle(SCREEN_X - 200 , 0, SCREEN_X, SCREEN_Y,"TR");
-            //BOT LEFT
-            EnemyCastle2 = new EnemyCastle( 0 , SCREEN_Y - 150, SCREEN_X, SCREEN_Y,"BL");
-            //BOT RIGHT
-            EnemyCastle3 = new PlayerCastle(SCREEN_X - 200 , SCREEN_Y - 150, SCREEN_X, SCREEN_Y,"BR");        
-        }
-        /*
-        if(pos == "TR"){
-            //Inicializacion de los 4 castillos
-            //TOP LEFT
-            EnemyCastle1 = new EnemyCastle(0, 0, SCREEN_X, SCREEN_Y,"TL");
-            //TOP RIGHT
-            PlayerCastle = new EnemyCastle(SCREEN_X - 200 , 0, SCREEN_X, SCREEN_Y,"TR");
-            //BOT LEFT
-            EnemyCastle2 = new EnemyCastle( 0 , SCREEN_Y - 150, SCREEN_X, SCREEN_Y,"BL");
-            //BOT RIGHT
-            EnemyCastle3 = new PlayerCastle(SCREEN_X - 200 , SCREEN_Y - 150, SCREEN_X, SCREEN_Y,"BR");         
-        }
-        if(pos == "BL"){
-            //Inicializacion de los 4 castillos
-            //TOP LEFT
-            EnemyCastle1 = new EnemyCastle(0, 0, SCREEN_X, SCREEN_Y,"TL");
-            //TOP RIGHT
-            EnemyCastle2 = new EnemyCastle(SCREEN_X - 200 , 0, SCREEN_X, SCREEN_Y,"TR");
-            //BOT LEFT
-            PlayerCastle = new EnemyCastle( 0 , SCREEN_Y - 150, SCREEN_X, SCREEN_Y,"BL");
-            //BOT RIGHT
-            EnemyCastle3 = new PlayerCastle(SCREEN_X - 200 , SCREEN_Y - 150, SCREEN_X, SCREEN_Y,"BR");          
-        }
-        if(pos == "BR"){
-            //Inicializacion de los 4 castillos
-            //TOP LEFT
-            EnemyCastle1 = new EnemyCastle(0, 0, SCREEN_X, SCREEN_Y,"TL");
-            //TOP RIGHT
-            EnemyCastle2 = new EnemyCastle(SCREEN_X - 200 , 0, SCREEN_X, SCREEN_Y,"TR");
-            //BOT LEFT
-            EnemyCastle3 = new EnemyCastle( 0 , SCREEN_Y - 150, SCREEN_X, SCREEN_Y,"BL");
-            //BOT RIGHT
-            PlayerCastle = new PlayerCastle(SCREEN_X - 200 , SCREEN_Y - 150, SCREEN_X, SCREEN_Y,"BR");         
-        }
-*/
-        bolPause = false;
+
     }
     public static void setHostPosition(String pos){
         hostPosition = pos;

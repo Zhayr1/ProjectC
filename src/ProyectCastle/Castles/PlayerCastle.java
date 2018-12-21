@@ -19,25 +19,24 @@ import org.newdawn.slick.SlickException;
  */
 public class PlayerCastle extends Rectangle implements Castle{
     
-    private final float castleWidth;
-    private final float castleHeight;
-    private int hp,energy,nCballs;
+    private final int castleWidth = 150;
+    private final int castleHeight = 150;
+    private static int GameRound = 3;    
+    private int hp,energy;
     private CannonBallImpl cannonBalls[];
     private Image arrowUp,arrowDown,arrowLeft,arrowRight;
     private String position;
     private boolean bolUp,bolDown,bolLeft,bolRight;
 
-    public PlayerCastle(float x, float y, float width, float height,String pos) throws SlickException {
+    public PlayerCastle(float x, float y, float width, float height) throws SlickException {
         super(x, y, width, height);
-        this.castleWidth = (float) (Game.SCREEN_X * 0.22);
-        this.castleHeight = (float) (Game.SCREEN_Y * 0.25);
         super.setWidth(castleWidth);
         super.setHeight(castleHeight);
+        this.reInitCastle(x, y);
         bolUp = bolDown = bolLeft = bolRight = false;
-        position = pos;
+        position = "none";
         hp = 10;
         energy = 0;
-        nCballs = 3;
         cannonBalls = new CannonBallImpl[10];
         arrowUp = new Image("Assets/ArrowUp.png");
         arrowDown = new Image("Assets/ArrowDown.png");
@@ -53,15 +52,14 @@ public class PlayerCastle extends Rectangle implements Castle{
         hp -= dmg;
     }
 
-    @Override
-    public void updateCannonBallsDisp(int num_cBalls) {
-        if(nCballs <= 10){
-            nCballs++;
+    public void nextRound() {
+        if(GameRound <= 10){
+            GameRound++;
         }
     }
     
     public void shotCBall(int dir){
-        for (int i = 0; i < nCballs; i++) {
+        for (int i = 0; i < GameRound; i++) {
             if(!cannonBalls[i].isActive()){
                 cannonBalls[i].shot(dir,this);
                 return;
@@ -71,20 +69,12 @@ public class PlayerCastle extends Rectangle implements Castle{
     public CannonBallImpl[] getCBalls(){
         return cannonBalls;
     }
-    public int getNumCBalls(){
-        return nCballs;
-    }
     public void drawComponents(Graphics g){
-        if(position == "TL" && bolDown)  arrowDown.draw(castleWidth * 0.375f,castleHeight + castleHeight * 0.05f);
-        if(position == "TL" && bolRight) arrowRight.draw(this.getX() + castleWidth + 20, this.getY() + castleHeight * 0.3f);
-        if(position == "TR" && bolDown) arrowDown.draw(this.getX() + castleWidth/2, this.getY() + castleHeight + 5);
-        if(position == "TR" && bolLeft) arrowLeft.draw(this.getX() - 40,this.getY() + castleHeight * 0.30f);
-        if(position == "BR" && bolUp) arrowUp.draw(this.getX() + castleWidth/2, this.getY() - 60);
-        if(position == "BR" && bolLeft) arrowLeft.draw(this.getX() - 40,this.getY() + castleHeight * 0.30f);
-        if(position == "BL" && bolUp) arrowUp.draw(this.getX() + castleWidth * 0.375f, this.getY() - 60);
-        if(position == "BL" && bolRight) arrowRight.draw(this.getX() + castleWidth + 20, this.getY() + castleHeight * 0.3f);
+        //Dibujar las flechas
+        
+        //
         g.drawString(String.valueOf(hp), this.getX() + castleWidth/2 , this.getY() + castleHeight * 0.4f);
-        if(position.equals("BR")){
+        if(position.equals("TL")){
             g.drawString("UP: "+ String.valueOf(this.getUp()), 300, 300);
             g.drawString("DOWN: "+ String.valueOf(this.getDown()), 300, 350);
             g.drawString("LEFT: "+ String.valueOf(this.getLeft()), 300, 400);

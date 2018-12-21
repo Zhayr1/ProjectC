@@ -14,8 +14,8 @@ import org.newdawn.slick.SlickException;
  */
 public class EnemyCastle extends PlayerCastle{
     
-    public EnemyCastle(float x, float y, float width, float height, String pos) throws SlickException {
-        super(x, y, width, height, pos);
+    public EnemyCastle(float x, float y, float width, float height) throws SlickException {
+        super(x, y, width, height);
     }
     
     @Override

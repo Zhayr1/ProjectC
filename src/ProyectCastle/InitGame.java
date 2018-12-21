@@ -179,9 +179,7 @@ public class InitGame extends BasicGameState {
         if( x >= 50 && x <= (50+170) && y >= 500 && y <= 565 ){
             startButton.setAlpha(0.9f);
             if(selectedPosition != ""){
-                Game.setHostPosition("1");
-                
-                System.out.println("Position: "+castlePos);
+                Game.setHostPosition("4");
                 bolReady = true;
             }
         }

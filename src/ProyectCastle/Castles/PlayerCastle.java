@@ -52,11 +52,14 @@ public class PlayerCastle extends Rectangle implements Castle{
         hp -= dmg;
     }
 
-    public void nextRound() {
+    public static void nextRound() {
         if(GameRound <= 10){
             GameRound++;
             //this.reInitCannonBalls();
         }
+    }
+    public static int getRound(){
+        return GameRound;
     }
     
     public void shotCBall(int dir){
@@ -72,15 +75,17 @@ public class PlayerCastle extends Rectangle implements Castle{
     }
     public void drawComponents(Graphics g){
         castleImg.draw(this.getX(),this.getY());
-        //Dibujar las flechas
-        
-        //
-        g.drawString(String.valueOf(hp), this.getX() + castleWidth* 0.45f , this.getY() + castleHeight * 0.45f);
-        if(position == Player.TL){
-            g.drawString("UP: "+ String.valueOf(player.getUp()), 300, 300);
-            g.drawString("DOWN: "+ String.valueOf(player.getDown()), 300, 350);
-            g.drawString("LEFT: "+ String.valueOf(player.getLeft()), 300, 400);
-            g.drawString("RIGHT: "+ String.valueOf(player.getRight()), 300, 450);
+        if(player != null){
+            //Dibujar las flechas
+            this.drawDirectionArrows(g);
+            //
+            g.drawString(String.valueOf(hp), this.getX() + castleWidth* 0.45f , this.getY() + castleHeight * 0.45f);
+            if(position == Player.BR){
+                g.drawString("UP: "+ String.valueOf(player.getUp()), 300, 300);
+                g.drawString("DOWN: "+ String.valueOf(player.getDown()), 300, 350);
+                g.drawString("LEFT: "+ String.valueOf(player.getLeft()), 300, 400);
+                g.drawString("RIGHT: "+ String.valueOf(player.getRight()), 300, 450);
+            }
         }
     }
     public int getHp(){
@@ -98,6 +103,14 @@ public class PlayerCastle extends Rectangle implements Castle{
         this.setY(y1);
         super.setX(x1);
         super.setY(y1);
+    }
+    private void reInitCannonBalls(){
+        
+    }
+    private void drawDirectionArrows(Graphics g){
+        if(player.getUp()){
+            arrowUp.draw(this.getX() + 50 , this.getY() - 40 );
+        }
     }
     public void setPlayer(Player p){
         player = p;

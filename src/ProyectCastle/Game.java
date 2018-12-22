@@ -102,6 +102,11 @@ public class Game extends BasicGameState{
                             p.unsetDown();
                             System.out.println("Unset Down");
                         }
+                        if(newx > 150 && newx < SCREEN_X  && newy > 150 && newy < SCREEN_Y ){
+                            p.setDownRight();
+                        }else{
+                            p.unsetDownRight();
+                        }
                         break;
                     case Player.TR:
                         if(newx > 0 && newx < SCREEN_X - 150 && newy > 0 && newy < 150){
@@ -114,6 +119,11 @@ public class Game extends BasicGameState{
                         }else{
                             p.unsetDown();
                         }
+                        if(newx > 0 && newx < SCREEN_X - 150 && newy > 150 && newy < SCREEN_Y){
+                            p.setDownLeft();
+                        }else{
+                            p.unsetDownLeft();
+                        }
                         break;
                     case Player.BL:
                         if(newx > 0 && newx < 150 && newy > 0 && newy < SCREEN_Y - 150){
@@ -125,7 +135,12 @@ public class Game extends BasicGameState{
                             p.setRight();
                         }else{
                             p.unsetRight();
-                        }                    
+                        }
+                        if(newx > 150 && newx < SCREEN_X && newy > 0 && newy < SCREEN_Y - 150){
+                            p.setUpRight();
+                        }else{
+                            p.unsetUpRight();
+                        }
                         break;
                     case Player.BR:
                         if(newx > 0 && newx < SCREEN_X - 150 && newy > 450 && newy < SCREEN_Y){
@@ -137,6 +152,11 @@ public class Game extends BasicGameState{
                             p.setUp();
                         }else{
                             p.unsetUp();
+                        }
+                        if(newx > 0 && newx < SCREEN_X - 150 && newy > 0 && newy < SCREEN_Y - 150){
+                            p.setUpLeft();
+                        }else{
+                            p.unsetUpLeft();
                         }
                         break;
             }      
@@ -173,9 +193,9 @@ public class Game extends BasicGameState{
         }
     }
     private void updateCastleBalls(){
-            //updateCBalls(redCastleBalls);
-            //updateCBalls(blueCastleBalls);
-            //updateCBalls(yellowCastleBalls);
+            updateCBalls(redCastleBalls);
+            updateCBalls(blueCastleBalls);
+            updateCBalls(yellowCastleBalls);
             updateCBalls(greenCastleBalls);
     }
     private void initExplotionsImg() throws SlickException{
@@ -190,8 +210,8 @@ public class Game extends BasicGameState{
     public void enter(GameContainer container,StateBasedGame game)throws SlickException{
         System.out.println("Enter stage Game");
         player1 = new Player();
-        player1.setPosition(Player.BR);
-        greenCastle.setPlayer(player1);
+        player1.setPosition(Player.TR);
+        blueCastle.setPlayer(player1);
         System.out.println(player1.getPosition());
         /*
         player2 = new ComputerPlayer(Player.TR);
@@ -230,6 +250,10 @@ public class Game extends BasicGameState{
     public void update(GameContainer container, StateBasedGame game, int delta) throws SlickException {
         if(!bolPause){
             this.updateCastleBalls();
+            this.destroyCastles(redCastle);
+            this.destroyCastles(blueCastle);
+            this.destroyCastles(yellowCastle);
+            this.destroyCastles(greenCastle);
         }
     }
     private void castleShot(PlayerCastle castle){
@@ -238,6 +262,10 @@ public class Game extends BasicGameState{
             if(castle.getPlayer().getDown())   castle.shotCBall(2);
             if(castle.getPlayer().getLeft())   castle.shotCBall(3);
             if(castle.getPlayer().getRight())  castle.shotCBall(4);
+            if(castle.getPlayer().getUpLeft()) castle.shotCBall(CannonBallImpl.UPLEFT);
+            if(castle.getPlayer().getUpRight()) castle.shotCBall(CannonBallImpl.UPRIGHT);
+            if(castle.getPlayer().getDownLeft()) castle.shotCBall(CannonBallImpl.DOWNLEFT);
+            if(castle.getPlayer().getDownRight()) castle.shotCBall(CannonBallImpl.DOWNRIGHT);
         }
     }
     private void initCastles() throws SlickException{
@@ -252,7 +280,11 @@ public class Game extends BasicGameState{
         greenCastleBalls  = greenCastle.getCBalls();
         yellowCastleBalls = yellowCastle.getCBalls();
     }
-    public static void setHostPosition(String pos){
-        hostPosition = pos;
+    private void destroyCastles(PlayerCastle castle){
+        if(castle.getHp() <= 0 && !castle.isDestroyed()){
+            castle.setDestroyed();
+            castle.getImage().setAlpha(0.6f);
+        }
+        if(castle.getHp() < 0) castle.setHp(0);
     }
 }

@@ -15,14 +15,27 @@ import org.newdawn.slick.geom.Circle;
  */
 public class CannonBallImpl extends Circle implements CannonBall{
     
+    public static final int UP = 1;
+    public static final int UPLEFT = 5;
+    public static final int UPRIGHT = 6;
+    public static final int DOWN = 2;
+    public static final int DOWNLEFT = 7;
+    public static final int DOWNRIGHT = 8;
+    public static final int LEFT = 3;
+    public static final int RIGHT = 4;
+    
     private final int radio = 10;
     private int vel = 5;    
     public boolean activeStatus = false;    
     public boolean exploited = false;
-    private boolean UP = false;
-    private boolean DOWN = false;
-    private boolean LEFT = false;
-    private boolean RIGHT = false;
+    private boolean up = false;
+    private boolean down = false;
+    private boolean left = false;
+    private boolean right = false;
+    private boolean upleft = false;
+    private boolean upright = false;
+    private boolean downleft = false;
+    private boolean downright = false;
     private float timer = 1;
     
     public CannonBallImpl(float x1, float y1) {
@@ -34,82 +47,84 @@ public class CannonBallImpl extends Circle implements CannonBall{
         setNotExploited();
         setActive();
         switch(direction){
-            case 1:
-                UP = true;
-                setXY(castle.getX() + castle.getWidth()/2 + this.radio , castle.getY());
+            case UP:
+                up = true;
+                setXY(castle.getX() + castle.getWidth()/2 - this.radio , castle.getY());
                 break;
-            case 2:
-                DOWN = true;
-                setXY(castle.getX() + castle.getWidth()/2 + this.radio, castle.getY() + castle.getHeight());                
+            case DOWN:
+                down = true;
+                setXY(castle.getX() + castle.getWidth()/2 - this.radio, castle.getY() + castle.getHeight());                
                 break;
-            case 3:
-                LEFT = true;
+            case LEFT:
+                left = true;
                 setXY(castle.getX(), castle.getY() + castle.getHeight()/2 - this.radio);                
                 break;
-            case 4:
-                RIGHT = true;
+            case RIGHT:
+                right = true;
                 setXY(castle.getX() + castle.getWidth() , castle.getY() + castle.getHeight()/2 - this.radio);                
                 break;
+            case UPLEFT:
+                upleft = true;
+                setXY(castle.getX() + this.radio, castle.getY() + this.radio);
+                break;
+            case UPRIGHT:
+                upright = true;
+                setXY(castle.getX() + castle.getWidth() - this.radio, castle.getY() + this.radio);
+                break;
+            case DOWNLEFT:
+                downleft = true;
+                setXY(castle.getX() + this.radio, castle.getY() + castle.getHeight() - this.radio);
+                break;
+            case DOWNRIGHT:
+                downright = true;
+                setXY(castle.getX() + castle.getWidth() - this.radio, castle.getY() + castle.getHeight() + this.radio);
+                break;
+                
         }
     }
 
     @Override
     public void disable() {
         setExploited();
-        if(UP){
-            if(this.getCenterY() < 150){
+        if(up){
+            if(this.intersects(Game.redCastle) || this.intersects(Game.blueCastle) ){
+                if(this.intersects(Game.redCastle)) Game.redCastle.setDamage(1);
+                if(this.intersects(Game.blueCastle)) Game.blueCastle.setDamage(1);
                 setInactive();
                 resetDirs();
             }
         }
-        if(DOWN){
-            if(this.getCenterY() > MainApplication.SCREEN_Y - 150){
+        if(down){
+            if(this.intersects(Game.yellowCastle) || this.intersects(Game.greenCastle) ){
+                if(this.intersects(Game.yellowCastle)) Game.yellowCastle.setDamage(1);
+                if(this.intersects(Game.greenCastle)) Game.greenCastle.setDamage(1);
                 setInactive();
                 resetDirs();
             }
         }
-        if(LEFT){
-            if(this.getCenterX() < 150){
-                setInactive();
-                resetDirs();
+        if(left){
+            if(this.intersects(Game.yellowCastle) || this.intersects(Game.redCastle) ){
+                if(this.intersects(Game.yellowCastle)) Game.yellowCastle.setDamage(1);
+                if(this.intersects(Game.redCastle)) Game.redCastle.setDamage(1);
+                    setInactive();
+                    resetDirs();
             }
         }
-        if(RIGHT){
-            if(this.getCenterX() > MainApplication.SCREEN_X - 150){
-                setInactive();
-                resetDirs();
+        if(right){
+            if(this.intersects(Game.blueCastle) || this.intersects(Game.greenCastle) ){
+                if(this.intersects(Game.blueCastle))  Game.blueCastle.setDamage(1);
+                if(this.intersects(Game.greenCastle)) Game.greenCastle.setDamage(1);
+                    setInactive();
+                    resetDirs();
             }
         }
-        /*
-        if(UP){
-            if(this.intersects(Game.EnemyCastle2)){
-                Game.EnemyCastle2.setDamage(1);
-                setInactive();
-                resetDirs();
+        if(downleft){
+            if(this.intersects(Game.yellowCastle)){
+                if(this.intersects(Game.yellowCastle)) Game.yellowCastle.setDamage(1);
+                    setInactive();
+                    resetDirs();
             }
         }
-        if(DOWN){
-            if(this.intersects(Game.EnemyCastle3)){
-                Game.EnemyCastle3.setDamage(1);
-                setInactive();
-                resetDirs();
-            }
-        }
-        if(LEFT){
-            if(this.intersects(Game.EnemyCastle3)){
-                Game.EnemyCastle3.setDamage(1);
-                setInactive();
-                resetDirs();
-            }
-        }
-        if(RIGHT){
-            if(this.getCenterX() >= Game.SCREEN_X - 200 + radio){
-                Game.EnemyCastle2.setDamage(1);
-                setInactive();
-                resetDirs();
-            }
-        }
-    */
     }
 
     @Override
@@ -124,10 +139,22 @@ public class CannonBallImpl extends Circle implements CannonBall{
     
     @Override
     public void updatePosition(){
-        if(UP)    super.setY(y - vel);
-        if(DOWN)  super.setY(y + vel);
-        if(LEFT)  super.setX(x - vel);
-        if(RIGHT) super.setX(x + vel);
+        if(up)    super.setY(y - vel);
+        if(down)  super.setY(y + vel);
+        if(left)  super.setX(x - vel);
+        if(right) super.setX(x + vel);
+        if(upleft){
+            setXY( x - vel , y - vel );
+        }
+        if(upright){
+            setXY( x - vel , y - vel );
+        }
+        if(downleft){
+            setXY( x - vel*1.5f , y + vel*0.9f );
+        }
+        if(downright){
+            setXY( x - vel , y - vel );
+        }
         disable();
     }
 
@@ -154,10 +181,10 @@ public class CannonBallImpl extends Circle implements CannonBall{
         super.setY(y1);
     }
     private void resetDirs(){
-        UP = false;
-        DOWN = false;
-        LEFT = false;
-        RIGHT = false;
+        up = false;
+        down = false;
+        left = false;
+        right = false;
     }
     public boolean isExploited(){
         return exploited;

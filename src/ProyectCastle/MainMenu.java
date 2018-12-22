@@ -43,7 +43,7 @@ public class MainMenu extends BasicGameState{
 	areas[i] = new MouseOverArea(container, menuImg[i], 300, 250 + (i*75), 300, 90, (AbstractComponent source) -> {
             for (int j = 0; j < 3; j++) {
                 if (source == areas[j]) {
-                    game.enterState(j + 1);
+                    game.enterState(MainApplication.Game);
                 }   
             }
         });

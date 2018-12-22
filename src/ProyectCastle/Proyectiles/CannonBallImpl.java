@@ -7,6 +7,7 @@ package ProyectCastle.Proyectiles;
 
 import ProyectCastle.Castles.PlayerCastle;
 import ProyectCastle.Game;
+import ProyectCastle.MainApplication;
 import org.newdawn.slick.geom.Circle;
 /**
  *
@@ -55,9 +56,29 @@ public class CannonBallImpl extends Circle implements CannonBall{
     @Override
     public void disable() {
         setExploited();
-        if(this.getCenterY() < 150){
-        setInactive();
-        resetDirs();
+        if(UP){
+            if(this.getCenterY() < 150){
+                setInactive();
+                resetDirs();
+            }
+        }
+        if(DOWN){
+            if(this.getCenterY() > MainApplication.SCREEN_Y - 150){
+                setInactive();
+                resetDirs();
+            }
+        }
+        if(LEFT){
+            if(this.getCenterX() < 150){
+                setInactive();
+                resetDirs();
+            }
+        }
+        if(RIGHT){
+            if(this.getCenterX() > MainApplication.SCREEN_X - 150){
+                setInactive();
+                resetDirs();
+            }
         }
         /*
         if(UP){

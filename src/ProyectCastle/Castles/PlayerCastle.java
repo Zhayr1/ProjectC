@@ -25,7 +25,7 @@ public class PlayerCastle extends Rectangle implements Castle{
     private int hp,energy;
     private CannonBallImpl cannonBalls[];
     private Player player;
-    private Image arrowUp,arrowDown,arrowLeft,arrowRight,castleImg;
+    private Image arrowUp,arrowUpLeft,arrowDown,arrowLeft,arrowRight,castleImg;
     private int position;
 
     public PlayerCastle(float x, float y, float width, float height,String imageSrc) throws SlickException {
@@ -39,6 +39,7 @@ public class PlayerCastle extends Rectangle implements Castle{
         energy = 0;
         cannonBalls = new CannonBallImpl[10];
         arrowUp = new Image("Assets/ArrowUp.png");
+        arrowUpLeft = new Image("Assets/ArrowUpLeft.png");
         arrowDown = new Image("Assets/ArrowDown.png");
         arrowLeft = new Image("Assets/ArrowLeft.png");
         arrowRight = new Image("Assets/ArrowRight.png");
@@ -110,6 +111,31 @@ public class PlayerCastle extends Rectangle implements Castle{
     private void drawDirectionArrows(Graphics g){
         if(player.getUp()){
             arrowUp.draw(this.getX() + 50 , this.getY() - 40 );
+            arrowUp.setAlpha(1f);
+        }else{
+            arrowUp.draw(this.getX() + 50, this.getY() - 40);
+            arrowUp.setAlpha(0.3f);
+        }
+        if(player.getDown()){
+            arrowDown.draw(this.getX() + 50 , this.getY() + 190 );
+            arrowDown.setAlpha(1f);
+        }else{
+            arrowDown.draw(this.getX() + 50 , this.getY() + 190 );
+            arrowDown.setAlpha(0.3f);
+        }
+        if(player.getLeft()){
+            arrowLeft.draw(this.getX() - 40 , this.getY() + 50 );
+            arrowLeft.setAlpha(1f);
+        }else{
+            arrowLeft.draw(this.getX() - 40 , this.getY() + 50 );
+            arrowLeft.setAlpha(0.3f);
+        }
+        if(player.getRight()){
+            arrowRight.draw(this.getX() + 50 , this.getY() - 40 );
+            arrowRight.setAlpha(1f);
+        }else{
+            arrowRight.draw(this.getX() + 50 , this.getY() - 40 );
+            arrowRight.setAlpha(0.3f);
         }
     }
     public void setPlayer(Player p){

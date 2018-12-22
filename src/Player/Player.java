@@ -21,11 +21,11 @@ public class Player {
     //2 - Top Right
     //3 - Bot Left
     //4 - bot Right
-    private boolean Up,Down,Left,Right;
+    private boolean Up,UpLeft,Down,Left,Right;
     
     public Player(){
         position = 0;
-        Up = Down = Left = Right = false;
+        Up  = UpLeft = Down = Left = Right = false;
     }
     
     public int getPosition(){
@@ -40,6 +40,9 @@ public class Player {
     //Setters Booleanos
     public void setUp(){
         Up = true;
+    }
+    public void setUpLeft(){
+        UpLeft = true;
     }
     public void setDown(){
         Down = true;
@@ -65,6 +68,9 @@ public class Player {
     //Getters booleanos
     public boolean getUp(){
         return Up;
+    }
+    public boolean getUpLeft(){
+        return UpLeft;
     }
     public boolean getDown(){
         return Down;

@@ -71,8 +71,6 @@ public class Game extends BasicGameState{
         castleShot(blueCastle);
         castleShot(yellowCastle);
         castleShot(greenCastle);
-        if(player1.getUp())   greenCastle.shotCBall(1);
-        //if(PlayerCastle.getLeft()) PlayerCastle.shotCBall(3);
     }
     @Override
     public void mouseMoved(int oldx, int oldy, int newx, int newy) {
@@ -175,9 +173,9 @@ public class Game extends BasicGameState{
         }
     }
     private void updateCastleBalls(){
-            updateCBalls(redCastleBalls);
-            updateCBalls(blueCastleBalls);
-            updateCBalls(yellowCastleBalls);
+            //updateCBalls(redCastleBalls);
+            //updateCBalls(blueCastleBalls);
+            //updateCBalls(yellowCastleBalls);
             updateCBalls(greenCastleBalls);
     }
     private void initExplotionsImg() throws SlickException{
@@ -235,10 +233,12 @@ public class Game extends BasicGameState{
         }
     }
     private void castleShot(PlayerCastle castle){
-        if(castle.getPlayer().getUp())     castle.shotCBall(1);        
-        if(castle.getPlayer().getDown())   castle.shotCBall(1);
-        if(castle.getPlayer().getLeft())   castle.shotCBall(1);
-        if(castle.getPlayer().getRight())  castle.shotCBall(1);
+        if(castle.getPlayer() != null){
+            if(castle.getPlayer().getUp())     castle.shotCBall(1);        
+            if(castle.getPlayer().getDown())   castle.shotCBall(2);
+            if(castle.getPlayer().getLeft())   castle.shotCBall(3);
+            if(castle.getPlayer().getRight())  castle.shotCBall(4);
+        }
     }
     private void initCastles() throws SlickException{
         redCastle = new PlayerCastle(0, 0, 150, 150, "Assets/RedCastle.png");

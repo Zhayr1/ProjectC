@@ -36,7 +36,7 @@ public class MainApplication extends StateBasedGame{
         this.addState(new menu());
         this.addState(new InitGame());
         this.addState(new OptionMenu());
-      //  this.addState(new Game());
+        this.addState(new Game());
     }
     
     // Main Method

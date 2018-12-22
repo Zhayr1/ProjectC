@@ -7,6 +7,7 @@ package ProyectCastle.Proyectiles;
 
 import ProyectCastle.Castles.PlayerCastle;
 import ProyectCastle.Game;
+import ProyectCastle.MainApplication;
 import org.newdawn.slick.geom.Circle;
 /**
  *
@@ -15,7 +16,6 @@ import org.newdawn.slick.geom.Circle;
 public class CannonBallImpl extends Circle implements CannonBall{
     
     private final int radio = 10;
-    private final int diametro = radio *2;
     private int vel = 5;    
     public boolean activeStatus = false;    
     public boolean exploited = false;
@@ -25,8 +25,6 @@ public class CannonBallImpl extends Circle implements CannonBall{
     private boolean RIGHT = false;
     private float timer = 1;
     
-    private Game main;
-
     public CannonBallImpl(float x1, float y1) {
         super(x1, y1, 10);
     }
@@ -59,6 +57,31 @@ public class CannonBallImpl extends Circle implements CannonBall{
     public void disable() {
         setExploited();
         if(UP){
+            if(this.getCenterY() < 150){
+                setInactive();
+                resetDirs();
+            }
+        }
+        if(DOWN){
+            if(this.getCenterY() > MainApplication.SCREEN_Y - 150){
+                setInactive();
+                resetDirs();
+            }
+        }
+        if(LEFT){
+            if(this.getCenterX() < 150){
+                setInactive();
+                resetDirs();
+            }
+        }
+        if(RIGHT){
+            if(this.getCenterX() > MainApplication.SCREEN_X - 150){
+                setInactive();
+                resetDirs();
+            }
+        }
+        /*
+        if(UP){
             if(this.intersects(Game.EnemyCastle2)){
                 Game.EnemyCastle2.setDamage(1);
                 setInactive();
@@ -86,6 +109,7 @@ public class CannonBallImpl extends Circle implements CannonBall{
                 resetDirs();
             }
         }
+    */
     }
 
     @Override

@@ -139,20 +139,21 @@ public class CannonBallImpl extends Circle implements CannonBall{
     
     @Override
     public void updatePosition(){
-        if(up)    super.setY(y - vel);
-        if(down)  super.setY(y + vel);
-        if(left)  super.setX(x - vel);
-        if(right) super.setX(x + vel);
-        if(upleft){
+        if(up){
+            super.setY(y - vel);
+        }else if(down){
+            super.setY(y + vel);
+        }else if(left){
+            super.setX(x - vel);
+        }else if(right){
+            super.setX(x + vel);
+        }else if(upleft){
             setXY( x - vel , y - vel );
-        }
-        if(upright){
+        }else if(upright){
             setXY( x - vel , y - vel );
-        }
-        if(downleft){
+        }else if(downleft){
             setXY( x - vel*1.5f , y + vel*0.9f );
-        }
-        if(downright){
+        }else if(downright){
             setXY( x - vel , y - vel );
         }
         disable();

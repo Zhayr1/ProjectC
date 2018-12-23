@@ -20,11 +20,11 @@ public class menu extends BasicGameState {
 	private String optUrl = "Assets/options0.png", optUrl1 = "Assets/options1.png";
 	private String exitUrl = "Assets/exit0.png", exitUrl1 = "Assets/exit1.png";
 	private int posX, posY;
+	private int separacion1 = 80, separacion2 = separacion1*2;
 
 	private int posBtnX = 70; // X para dibujar los botones
 	private int posBtnY = 330; // Y para dibujar los botones
 	private Input ent;
-	private int opc;
 	
 	public menu() {
 	}
@@ -55,7 +55,7 @@ public class menu extends BasicGameState {
 	@Override
 	public void render(GameContainer container, StateBasedGame game, Graphics g) throws SlickException {
 		bg.draw(0, 0, width, height);
-		generarBotones(g);
+		generarBotones(container, game, g);
 		generarCoordenadas(g);
 		
 	}
@@ -65,16 +65,10 @@ public class menu extends BasicGameState {
 	public void update(GameContainer container, StateBasedGame game, int delta) throws SlickException {
 		posX = Mouse.getX();
 		posY = -(Mouse.getY()-(int)height); // Una Maraña con las coordenadas
-		
-		if(opc==-1) {
-			container.exit();
-		} else 
-			game.enterState(opc);
 	}
 	
-	public void generarBotones(Graphics g) throws SlickException {
+	public void generarBotones(GameContainer container, StateBasedGame game, Graphics g) throws SlickException {
 		title.draw(400-(title.getWidth()/2), 150-(title.getHeight()/2)); // Dibuja el titulo en funcion al centro de la imagen
-		int separacion1 = 80, separacion2 = separacion1*2;
 		
 		if((posX > posBtnX && posX < playBtn.getWidth()+posBtnX) && (posY > posBtnY && posY < playBtn.getHeight()+posBtnY)) {
 			g.drawString("Play", 500, 400);
@@ -83,7 +77,7 @@ public class menu extends BasicGameState {
 			exitBtn.draw(posBtnX, posBtnY+separacion2);
 			
 			if(ent.isMousePressed(0)) {
-				opc = 1;
+				game.enterState(1);
 			}
 			
 		}else if((posX > posBtnX && posX < optBtn.getWidth()+posBtnX) && (posY > posBtnY+separacion1 && posY < optBtn.getHeight()+posBtnY+separacion1)) {
@@ -93,7 +87,7 @@ public class menu extends BasicGameState {
 			exitBtn.draw(posBtnX, posBtnY+separacion2);
 			
 			if(ent.isMousePressed(0)) {
-				opc = 2;
+				game.enterState(2);
 			}
 			
 		}else if((posX > posBtnX && posX < exitBtn.getWidth()+posBtnX) && (posY > posBtnY+separacion2 && posY < exitBtn.getHeight()+posBtnY+separacion2)) {
@@ -103,7 +97,7 @@ public class menu extends BasicGameState {
 			optBtn.draw(posBtnX, posBtnY+separacion1);
 			
 			if(ent.isMousePressed(0)) {
-				opc = -1;
+				container.exit();
 			}
 		} else {
 			// Dibujar botones

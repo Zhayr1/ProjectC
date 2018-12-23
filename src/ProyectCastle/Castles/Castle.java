@@ -13,7 +13,5 @@ public interface Castle {
 
     //Funcion para restarle vida al castillo cuando impacte una bala
     public void setDamage(int dmg);
-    //funcion para incrementar el numero de balas de cañon disponibles max 10
-    public void updateCannonBallsDisp(int num_cBalls);
     
 }

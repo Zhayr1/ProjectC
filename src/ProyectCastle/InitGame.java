@@ -45,7 +45,7 @@ public class InitGame extends BasicGameState {
     public void init(GameContainer container, StateBasedGame game) throws SlickException {
         background = new Image("Assets/MenuBackground.png");
         selectBg = new Image("Assets/SelectField.png");
-        selectImg = new Image("Assets/CastleChoose.png");
+        selectImg = new Image("Assets/BlueCastle.png");
         chooseText = new Image("Assets/ChooseText.png");
         startButton = new Image("Assets/StartButton.png");
         startButton.setAlpha(0.8f);
@@ -57,7 +57,7 @@ public class InitGame extends BasicGameState {
         on  = new Color(1,1,1,0.9f);
         off = new Color(1,1,1,0.7f);
         for (int i=0;i<2;i++) {
-        	selectArea[i] = new MouseOverArea(container, selectImg, 300 + (i * 225) , 50, (AbstractComponent source) -> {
+	selectArea[i] = new MouseOverArea(container, selectImg, 300 + (i * 225) , 50, (AbstractComponent source) -> {
             for (int j = 0; j < 4; j++) {
                 if(source == selectArea[j]) selector = j;
             }
@@ -163,7 +163,6 @@ public class InitGame extends BasicGameState {
     @Override
     public void update(GameContainer container, StateBasedGame game, int delta) throws SlickException {
         if(bolReady){
-            game.addState(new Game());
             game.enterState(MainApplication.Game);
             bolReady = false;
         }
@@ -180,9 +179,6 @@ public class InitGame extends BasicGameState {
         if( x >= 50 && x <= (50+170) && y >= 500 && y <= 565 ){
             startButton.setAlpha(0.9f);
             if(selectedPosition != ""){
-                Game.setHostPosition(castlePos);
-                
-                System.out.println("Position: "+castlePos);
                 bolReady = true;
             }
         }

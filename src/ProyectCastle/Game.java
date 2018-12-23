@@ -5,7 +5,8 @@
  */
 package ProyectCastle;
 
-import ProyectCastle.Castles.EnemyCastle;
+import Player.ComputerPlayer;
+import Player.Player;
 import ProyectCastle.Castles.PlayerCastle;
 import ProyectCastle.Proyectiles.CannonBallImpl;
 import org.newdawn.slick.Color;
@@ -29,10 +30,15 @@ public class Game extends BasicGameState{
     public static int SCREEN_Y = 600;
     public static float gameTime;
     public static String mousex = "",mousey = "";
-    public static PlayerCastle EnemyCastle1,EnemyCastle2,EnemyCastle3,PlayerCastle;
+    public static PlayerCastle redCastle,blueCastle,greenCastle,yellowCastle;
+    public static CannonBallImpl[] redCastleBalls,
+                                   blueCastleBalls,
+                                   greenCastleBalls,
+                                   yellowCastleBalls;
+    public static Player player1,player2,player3,player4;
     private static String hostPosition = "";
     private Image background;
-    private Image explt1,explt2,explt3,explt4,explt5,explt6;
+    private Image explt1;
     private static boolean bolPause = true; 
     
     
@@ -42,16 +48,16 @@ public class Game extends BasicGameState{
             System.exit(0);
 	}
         if(key == Input.KEY_UP){
-            PlayerCastle.shotCBall(1);
+            //PlayerCastle.shotCBall(1);
         }
         if(key == Input.KEY_DOWN){
-             PlayerCastle.shotCBall(2);
+             //PlayerCastle.shotCBall(2);
         }
         if(key == Input.KEY_LEFT){
-             PlayerCastle.shotCBall(3);
+             //PlayerCastle.shotCBall(3);
         }
         if(key == Input.KEY_RIGHT){
-             PlayerCastle.shotCBall(4);
+             //PlayerCastle.shotCBall(4);
         }
     }
     @Override
@@ -61,97 +67,139 @@ public class Game extends BasicGameState{
     }
     @Override
     public void mouseClicked(int button, int x, int y, int clickCount) {
-        if(PlayerCastle.getUp())   PlayerCastle.shotCBall(1);
-        if(PlayerCastle.getLeft()) PlayerCastle.shotCBall(3);
+        castleShot(redCastle);
+        castleShot(blueCastle);
+        castleShot(yellowCastle);
+        castleShot(greenCastle);
     }
     @Override
     public void mouseMoved(int oldx, int oldy, int newx, int newy) {
         if(!bolPause){
-            if(hostPosition == "TL"){
-                if(newx > 170 && newx < SCREEN_X && newy > 0 && newy < 160){
-                    PlayerCastle.setRight();
-                    System.out.println("SetRight");
-                }else{
-                    PlayerCastle.unsetRight();
-                    System.out.println("UnsetRight");
-                }
-                if(newx > 0 && newx < 200 && newy > 150 && newy < SCREEN_Y){
-                    PlayerCastle.setDown();
-                    System.out.println("Down");
-                }else{
-                    PlayerCastle.unsetDown();
-                }
-            }
-            if(hostPosition == "TR"){
-                System.out.println("-.-");
-                if(newx > 0 && newx < SCREEN_X - 170 && newy > 450 && newy < 600){
-                    PlayerCastle.setLeft();
-                }else{
-                    PlayerCastle.unsetLeft();
-                }
-                if(newx > 600 && newx < 800 && newy > 0 && newy < SCREEN_Y - 170){
-                    PlayerCastle.setUp();
-                }else{
-                    PlayerCastle.unsetUp();
-                }
-            }
-            if(hostPosition == "BL"){
-                System.out.println("-.-");
-                if(newx > 0 && newx < SCREEN_X - 170 && newy > 450 && newy < 600){
-                    PlayerCastle.setLeft();
-                }else{
-                    PlayerCastle.unsetLeft();
-                }
-                if(newx > 600 && newx < 800 && newy > 0 && newy < SCREEN_Y - 170){
-                    PlayerCastle.setUp();
-                }else{
-                    PlayerCastle.unsetUp();
-                }
-            }
-            if(hostPosition == "BR"){
-                System.out.println("-.-");
-                if(newx > 0 && newx < SCREEN_X - 170 && newy > 450 && newy < 600){
-                    PlayerCastle.setLeft();
-                }else{
-                    PlayerCastle.unsetLeft();
-                }
-                if(newx > 600 && newx < 800 && newy > 0 && newy < SCREEN_Y - 170){
-                    PlayerCastle.setUp();
-                }else{
-                    PlayerCastle.unsetUp();
-                }
-            }
+            renderDirectionArrowsBasedOnMouse(newx , newy , redCastle.getPlayer());
+            renderDirectionArrowsBasedOnMouse(newx , newy , blueCastle.getPlayer());
+            renderDirectionArrowsBasedOnMouse(newx , newy , yellowCastle.getPlayer());
+            renderDirectionArrowsBasedOnMouse(newx , newy , greenCastle.getPlayer());
             //Mouse position
             if(newx > 0 && newx < SCREEN_X) mousex = String.valueOf(newx);
             if(newy > 0 && newy < SCREEN_Y) mousey = String.valueOf(newy);
         }
-    }    
+    }
+    private void renderDirectionArrowsBasedOnMouse(int newx , int newy , Player p){
+        if(p != null){    
+            switch(p.getPosition()){
+                    case Player.TL:
+                        if(newx > 150 && newx < SCREEN_X && newy > 0 && newy < 150){
+                            p.setRight();
+                            System.out.println("Set Right");
+                        }else{
+                            p.unsetRight();
+                            System.out.println("Unset Right");
+                        }
+                        if(newx > 0 && newx < 200 && newy > 150 && newy < SCREEN_Y){
+                            p.setDown();
+                            System.out.println("Set Down");
+                        }else{
+                            p.unsetDown();
+                            System.out.println("Unset Down");
+                        }
+                        if(newx > 150 && newx < SCREEN_X  && newy > 150 && newy < SCREEN_Y ){
+                            p.setDownRight();
+                        }else{
+                            p.unsetDownRight();
+                        }
+                        break;
+                    case Player.TR:
+                        if(newx > 0 && newx < SCREEN_X - 150 && newy > 0 && newy < 150){
+                            p.setLeft();
+                        }else{
+                            p.unsetLeft();
+                        }
+                        if(newx > SCREEN_X - 150 && newx < SCREEN_X && newy > 150 && newy < SCREEN_Y){
+                            p.setDown();
+                        }else{
+                            p.unsetDown();
+                        }
+                        if(newx > 0 && newx < SCREEN_X - 150 && newy > 150 && newy < SCREEN_Y){
+                            p.setDownLeft();
+                        }else{
+                            p.unsetDownLeft();
+                        }
+                        break;
+                    case Player.BL:
+                        if(newx > 0 && newx < 150 && newy > 0 && newy < SCREEN_Y - 150){
+                            p.setUp();
+                        }else{
+                            p.unsetUp();
+                        }
+                        if(newx > 150 && newx < SCREEN_X && newy > SCREEN_Y - 150 && newy < SCREEN_Y){
+                            p.setRight();
+                        }else{
+                            p.unsetRight();
+                        }
+                        if(newx > 150 && newx < SCREEN_X && newy > 0 && newy < SCREEN_Y - 150){
+                            p.setUpRight();
+                        }else{
+                            p.unsetUpRight();
+                        }
+                        break;
+                    case Player.BR:
+                        if(newx > 0 && newx < SCREEN_X - 150 && newy > 450 && newy < SCREEN_Y){
+                            p.setLeft();
+                        }else{
+                            p.unsetLeft();
+                        }
+                        if(newx > SCREEN_X - 150 && newx < SCREEN_X && newy > 0 && newy < SCREEN_Y - 150){
+                            p.setUp();
+                        }else{
+                            p.unsetUp();
+                        }
+                        if(newx > 0 && newx < SCREEN_X - 150 && newy > 0 && newy < SCREEN_Y - 150){
+                            p.setUpLeft();
+                        }else{
+                            p.unsetUpLeft();
+                        }
+                        break;
+            }      
+        }
+    }
     private void renderCannonBalls(Graphics g){
-        CannonBallImpl[] aux = PlayerCastle.getCBalls();
-        for (int i = 0; i < PlayerCastle.getNumCBalls(); i++) {
-            if(aux[i].isActive()){
-                g.draw(aux[i]);
-                g.fill(aux[i]);
-            }else if(!aux[i].isActive() && aux[i].isExploited() ){
-                explt1.draw(aux[i].getCenterX() - aux[i].getRadius(),aux[i].getCenterY() - aux[i].getRadius());
-                aux[i].decreaseTimer(0.033f);
-                if(aux[i].getTimer() <= 0) {
-                    aux[i].setNotExploited();
-                    aux[i].resetTimer();
+        calculateBallStatusForRender(g,redCastleBalls);
+        calculateBallStatusForRender(g,blueCastleBalls);
+        calculateBallStatusForRender(g,yellowCastleBalls);
+        calculateBallStatusForRender(g,greenCastleBalls);
+    }
+    private void calculateBallStatusForRender(Graphics g,CannonBallImpl[] castleBalls){
+        for (int i = 0; i < PlayerCastle.getRound(); i++) {
+            if(castleBalls[i].isActive()){
+                g.draw(castleBalls[i]);
+                g.fill(castleBalls[i]);
+            }else if(!castleBalls[i].isActive() && castleBalls[i].isExploited() ){
+                explt1.draw(castleBalls[i].getCenterX() - castleBalls[i].getRadius(),
+                castleBalls[i].getCenterY() - castleBalls[i].getRadius());
+                //Tiempo de la imagen de explosion
+                castleBalls[i].decreaseTimer(0.033f);
+                if(castleBalls[i].getTimer() <= 0) {
+                    castleBalls[i].setNotExploited();
+                    castleBalls[i].resetTimer();
                 }
             }
         }
     }
-    private void updateCBalls(){
-        CannonBallImpl[] aux = PlayerCastle.getCBalls();    
-        for (int i = 0; i < PlayerCastle.getNumCBalls(); i++) {
-            if (aux[i].isActive()) {
-                aux[i].updatePosition();
+    private void updateCBalls(CannonBallImpl[] castleBalls){ 
+        for (int i = 0; i < PlayerCastle.getRound(); i++) {
+            if(castleBalls[i].isActive()){
+                castleBalls[i].updatePosition();
             }
         }
     }
+    private void updateCastleBalls(){
+            updateCBalls(redCastleBalls);
+            updateCBalls(blueCastleBalls);
+            updateCBalls(yellowCastleBalls);
+            updateCBalls(greenCastleBalls);
+    }
     private void initExplotionsImg() throws SlickException{
-        explt1 = explt2 = explt3 = explt4 = explt5 = explt6 = new Image("Assets/Explosion.png");
+        explt1 = new Image("Assets/Explosion.png");
                 
     }
     @Override
@@ -160,89 +208,83 @@ public class Game extends BasicGameState{
     }
     @Override
     public void enter(GameContainer container,StateBasedGame game)throws SlickException{
-        this.initCastles(hostPosition);
-        //inicializacion de los 4 castillos en funcion de la posicion que elija el jugador
-        //Background
-        background = new Image("Assets/BackGround.png");
-        this.initExplotionsImg();   
-        bolPause = false;
+        System.out.println("Enter stage Game");
+        player1 = new Player();
+        player1.setPosition(Player.TR);
+        blueCastle.setPlayer(player1);
+        System.out.println(player1.getPosition());
+        /*
+        player2 = new ComputerPlayer(Player.TR);
+        player3 = new ComputerPlayer(Player.BL);
+        player4 = new ComputerPlayer(Player.BR);
+        player1.setPosition(Integer.valueOf(hostPosition));
+        redCastle.setPlayer(player1);
+        blueCastle.setPlayer(player2);
+        yellowCastle.setPlayer(player3);
+        greenCastle.setPlayer(player4);*/
     }
     @Override
     public void init(GameContainer container, StateBasedGame game) throws SlickException {
-        System.out.println("init");
+        System.out.println("initGameHere!!");
+        //inicializacion de los 4 castillos
+        this.initCastles();
+        //inicializacion de las balas de cañon de los 4 castillos
+        this.initCastleBalls();
+        //Background
+        background = new Image("Assets/BackGround.png");
+        this.initExplotionsImg();   
+        bolPause = false;        
     }
     @Override
     public void render(GameContainer container, StateBasedGame game, Graphics g) throws SlickException {
-        if(!bolPause){
             g.setColor(Color.white);
             background.draw(0,0);
-            PlayerCastle.drawComponents(g);
-            EnemyCastle3.drawComponents(g);
-            EnemyCastle1.drawComponents(g);
-            EnemyCastle2.drawComponents(g);
+            redCastle.drawComponents(g);
+            blueCastle.drawComponents(g);
+            yellowCastle.drawComponents(g);
+            greenCastle.drawComponents(g);
             g.drawString("Mouse X: "+mousex + "\nMouse Y: " + mousey, 5 , 25);
             renderCannonBalls(g);   
-        }
     }
     @Override
     public void update(GameContainer container, StateBasedGame game, int delta) throws SlickException {
         if(!bolPause){
-            updateCBalls();
+            this.updateCastleBalls();
+            this.destroyCastles(redCastle);
+            this.destroyCastles(blueCastle);
+            this.destroyCastles(yellowCastle);
+            this.destroyCastles(greenCastle);
         }
     }
-    
-    private void initCastles(String pos) throws SlickException{
-        if(pos == "TL"){
-            //Inicializacion de los 4 castillos
-            //TOP LEFT
-            PlayerCastle = new EnemyCastle(0, 0, SCREEN_X, SCREEN_Y,"TL");
-            PlayerCastle.reInitCastle(0, 0);
-            PlayerCastle.setPosition("TL");
-            //TOP RIGHT
-            EnemyCastle1 = new EnemyCastle(SCREEN_X - 200 , 0, SCREEN_X, SCREEN_Y,"TR");
-            //BOT LEFT
-            EnemyCastle2 = new EnemyCastle( 0 , SCREEN_Y - 150, SCREEN_X, SCREEN_Y,"BL");
-            //BOT RIGHT
-            EnemyCastle3 = new PlayerCastle(SCREEN_X - 200 , SCREEN_Y - 150, SCREEN_X, SCREEN_Y,"BR");        
+    private void castleShot(PlayerCastle castle){
+        if(castle.getPlayer() != null){
+            if(castle.getPlayer().getUp())     castle.shotCBall(1);        
+            if(castle.getPlayer().getDown())   castle.shotCBall(2);
+            if(castle.getPlayer().getLeft())   castle.shotCBall(3);
+            if(castle.getPlayer().getRight())  castle.shotCBall(4);
+            if(castle.getPlayer().getUpLeft()) castle.shotCBall(CannonBallImpl.UPLEFT);
+            if(castle.getPlayer().getUpRight()) castle.shotCBall(CannonBallImpl.UPRIGHT);
+            if(castle.getPlayer().getDownLeft()) castle.shotCBall(CannonBallImpl.DOWNLEFT);
+            if(castle.getPlayer().getDownRight()) castle.shotCBall(CannonBallImpl.DOWNRIGHT);
         }
-        /*
-        if(pos == "TR"){
-            //Inicializacion de los 4 castillos
-            //TOP LEFT
-            EnemyCastle1 = new EnemyCastle(0, 0, SCREEN_X, SCREEN_Y,"TL");
-            //TOP RIGHT
-            PlayerCastle = new EnemyCastle(SCREEN_X - 200 , 0, SCREEN_X, SCREEN_Y,"TR");
-            //BOT LEFT
-            EnemyCastle2 = new EnemyCastle( 0 , SCREEN_Y - 150, SCREEN_X, SCREEN_Y,"BL");
-            //BOT RIGHT
-            EnemyCastle3 = new PlayerCastle(SCREEN_X - 200 , SCREEN_Y - 150, SCREEN_X, SCREEN_Y,"BR");         
-        }
-        if(pos == "BL"){
-            //Inicializacion de los 4 castillos
-            //TOP LEFT
-            EnemyCastle1 = new EnemyCastle(0, 0, SCREEN_X, SCREEN_Y,"TL");
-            //TOP RIGHT
-            EnemyCastle2 = new EnemyCastle(SCREEN_X - 200 , 0, SCREEN_X, SCREEN_Y,"TR");
-            //BOT LEFT
-            PlayerCastle = new EnemyCastle( 0 , SCREEN_Y - 150, SCREEN_X, SCREEN_Y,"BL");
-            //BOT RIGHT
-            EnemyCastle3 = new PlayerCastle(SCREEN_X - 200 , SCREEN_Y - 150, SCREEN_X, SCREEN_Y,"BR");          
-        }
-        if(pos == "BR"){
-            //Inicializacion de los 4 castillos
-            //TOP LEFT
-            EnemyCastle1 = new EnemyCastle(0, 0, SCREEN_X, SCREEN_Y,"TL");
-            //TOP RIGHT
-            EnemyCastle2 = new EnemyCastle(SCREEN_X - 200 , 0, SCREEN_X, SCREEN_Y,"TR");
-            //BOT LEFT
-            EnemyCastle3 = new EnemyCastle( 0 , SCREEN_Y - 150, SCREEN_X, SCREEN_Y,"BL");
-            //BOT RIGHT
-            PlayerCastle = new PlayerCastle(SCREEN_X - 200 , SCREEN_Y - 150, SCREEN_X, SCREEN_Y,"BR");         
-        }
-*/
-        bolPause = false;
     }
-    public static void setHostPosition(String pos){
-        hostPosition = pos;
+    private void initCastles() throws SlickException{
+        redCastle = new PlayerCastle(0, 0, 150, 150, "Assets/RedCastle.png");
+        blueCastle = new PlayerCastle(SCREEN_X - 150, 0, 150, 150, "Assets/BlueCastle.png");
+        yellowCastle = new PlayerCastle(0, SCREEN_Y - 150, 150, 150, "Assets/YellowCastle.png");
+        greenCastle = new PlayerCastle(SCREEN_X - 150, SCREEN_Y - 150, 150, 150, "Assets/GreenCastle.png");
+    }
+    private void initCastleBalls(){
+        redCastleBalls    = redCastle.getCBalls();
+        blueCastleBalls   = blueCastle.getCBalls();
+        greenCastleBalls  = greenCastle.getCBalls();
+        yellowCastleBalls = yellowCastle.getCBalls();
+    }
+    private void destroyCastles(PlayerCastle castle){
+        if(castle.getHp() <= 0 && !castle.isDestroyed()){
+            castle.setDestroyed();
+            castle.getImage().setAlpha(0.6f);
+        }
+        if(castle.getHp() < 0) castle.setHp(0);
     }
 }

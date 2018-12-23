@@ -5,6 +5,7 @@
  */
 package ProyectCastle;
 
+import ProyectCastle.Castles.Castle;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
@@ -24,9 +25,9 @@ public class InitGame extends BasicGameState {
     public static final int ID = 1;
     
     //Elementos visuales
-    private Image background,selectBg,selectImg,chooseText,startButton;
-    private final MouseOverArea[] selectArea = new MouseOverArea[4];
-    
+    private Image background,selectImg,chooseText,startButton;
+    private Image[] selectArea;
+    private CastleSelector select1;
     //Selector esquina
     private int selector;
     //colores
@@ -35,6 +36,10 @@ public class InitGame extends BasicGameState {
     private String selectedPosition;
     private String castlePos;
     private boolean bolReady;
+
+    public InitGame() {
+        this.selectArea = new Image[4];
+    }
     
     @Override
     public int getID() {
@@ -44,7 +49,6 @@ public class InitGame extends BasicGameState {
     @Override
     public void init(GameContainer container, StateBasedGame game) throws SlickException {
         background = new Image("Assets/MenuBackground.png");
-        selectBg = new Image("Assets/SelectField.png");
         selectImg = new Image("Assets/BlueCastle.png");
         chooseText = new Image("Assets/ChooseText.png");
         startButton = new Image("Assets/StartButton.png");
@@ -53,107 +57,24 @@ public class InitGame extends BasicGameState {
         bolReady = false;
         selector = 0;
         selectedPosition = "";
-        //Init colors
-        on  = new Color(1,1,1,0.9f);
-        off = new Color(1,1,1,0.7f);
-        for (int i=0;i<2;i++) {
-	selectArea[i] = new MouseOverArea(container, selectImg, 300 + (i * 225) , 50, (AbstractComponent source) -> {
-            for (int j = 0; j < 4; j++) {
-                if(source == selectArea[j]) selector = j;
-            }
-            switch(selector){
-                case 0:
-                    selectedPosition = "Top Left";
-                    castlePos = "TL";
-                    selectArea[0].setNormalColor(on);
-                    selectArea[1].setNormalColor(off);
-                    selectArea[2].setNormalColor(off);
-                    selectArea[3].setNormalColor(off);
-                    break;
-                case 1:
-                    selectedPosition = "Top Right";
-                    castlePos = "TR";
-                    selectArea[0].setNormalColor(off);
-                    selectArea[1].setNormalColor(on);
-                    selectArea[2].setNormalColor(off);
-                    selectArea[3].setNormalColor(off);
-                    break;
-                case 2:
-                    selectedPosition = "Bot Left";
-                    castlePos = "BL";
-                    selectArea[0].setNormalColor(off);
-                    selectArea[1].setNormalColor(off);
-                    selectArea[2].setNormalColor(on);
-                    selectArea[3].setNormalColor(off);
-                    break;
-                case 3:
-                    selectedPosition = "Bot Right";
-                    castlePos = "BR";
-                    selectArea[0].setNormalColor(off);
-                    selectArea[1].setNormalColor(off);
-                    selectArea[2].setNormalColor(off);
-                    selectArea[3].setNormalColor(on);
-                    break;
-            }
-        });
-        selectArea[i+2] = new MouseOverArea(container, selectImg, 300 + (i * 225) , 50 + 155 , (AbstractComponent source) -> {
-            for (int j = 0; j < 4; j++) {
-                if(source == selectArea[j]) selector = j;
-            }
-            switch(selector){
-                case 0:
-                    selectedPosition = "Top Left";
-                    castlePos = "TL";
-                    selectArea[0].setNormalColor(on);
-                    selectArea[1].setNormalColor(off);
-                    selectArea[2].setNormalColor(off);
-                    selectArea[3].setNormalColor(off);
-                    break;
-                case 1:
-                    selectedPosition = "Top Right";
-                    castlePos = "TR";
-                    selectArea[0].setNormalColor(off);
-                    selectArea[1].setNormalColor(on);
-                    selectArea[2].setNormalColor(off);
-                    selectArea[3].setNormalColor(off);
-                    break;
-                case 2:
-                    selectedPosition = "Bot Left";
-                    castlePos = "BL";
-                    selectArea[0].setNormalColor(off);
-                    selectArea[1].setNormalColor(off);
-                    selectArea[2].setNormalColor(on);
-                    selectArea[3].setNormalColor(off);
-                    break;
-                case 3:
-                    selectedPosition = "Bot Right";
-                    castlePos = "BR";
-                    selectArea[0].setNormalColor(off);
-                    selectArea[1].setNormalColor(off);
-                    selectArea[2].setNormalColor(off);
-                    selectArea[3].setNormalColor(on);
-                    break;
-            }
-        });
-        selectArea[i].setNormalColor(new Color(1,1,1,0.7f));
-        selectArea[i+2].setNormalColor(new Color(1,1,1,0.7f));
-	selectArea[i].setMouseOverColor(new Color(1,1,1,0.9f));
-        selectArea[i+2].setMouseOverColor(new Color(1,1,1,0.9f));
-	}
+        selectArea[0] = new Image("Assets/SelectFieldRed.png");
+        selectArea[1] = new Image("Assets/SelectFieldBlue.png");
+        selectArea[2] = new Image("Assets/SelectFieldYellow.png");
+        selectArea[3] = new Image("Assets/SelectFieldGreen.png");
         
-        
+        select1 = new CastleSelector(20, 50,Castle.GREEN);
     }
 
     @Override
     public void render(GameContainer container, StateBasedGame game, Graphics g) throws SlickException {
         g.setAntiAlias(true);
         background.draw(0,0);
-        chooseText.draw(250,0);
-        selectBg.draw(300,50);
-        startButton.draw(50,500);
-        for (int i = 0; i < 4; i++) {
-            selectArea[i].render(container,g);
-        }
+        chooseText.draw(100,0);
+        startButton.draw(625,500);
+        //for (int i = 0; i < 4; i++) {
+          //  selectArea[i].draw(20,50 + (i*135));
+        //}
+        select1.draw(20, 50, g);
         g.setColor(Color.white);
         g.drawString(selectedPosition, 10, 50);
         
@@ -172,6 +93,12 @@ public class InitGame extends BasicGameState {
     @Override
     public void mouseClicked(int button, int x, int y, int clickCount) {
         if( x >= 50 && x <= (50+170) && y >= 500 && y <= 565 ){
+        }
+        if(this.isMouseHere(select1.getX() + 345, select1.getY()+50, 50, 50, x, y)){
+            select1.leftArrowClick();
+        }
+        if(this.isMouseHere(select1.getX() + 445, select1.getY()+50, 50, 50, x, y)){
+            select1.rightArrowClick();
         }
     }
     @Override
@@ -196,5 +123,20 @@ public class InitGame extends BasicGameState {
         }else{
             startButton.setAlpha(0.8f);
         }
+        if(!this.isMouseHere(select1.getX() + 345, select1.getY()+50, 50, 50, newx, newy)){
+            select1.getLeftArrow().setAlpha(0.3f);
+        }
+        if(!this.isMouseHere(select1.getX() + 445, select1.getY()+50, 50, 50, newx, newy)){
+            select1.getRightArrow().setAlpha(0.3f);
+        }
+        if(this.isMouseHere(select1.getX() + 345, select1.getY()+50, 50, 50, newx, newy)){
+            select1.getLeftArrow().setAlpha(1f);
+        }
+        if(this.isMouseHere(select1.getX() + 445, select1.getY()+50, 50, 50, newx, newy)){
+            select1.getRightArrow().setAlpha(1f);
+        }        
     }
+    private boolean isMouseHere(float x1,float y1,float width,float height,float mx,float my){
+        return mx > x1 && mx < x1+width && my > y1 && my < y1+height;
+    } 
 }

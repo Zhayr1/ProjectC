@@ -11,6 +11,12 @@ package ProyectCastle.Castles;
  */
 public interface Castle {
 
+    public static final int RED = 0;    
+    public static final int BLUE = 1;
+    public static final int YELLOW = 2;
+    public static final int GREEN = 3;
+
+
     //Funcion para restarle vida al castillo cuando impacte una bala
     public void setDamage(int dmg);
     

@@ -57,7 +57,7 @@ public class InitGame extends BasicGameState {
         on  = new Color(1,1,1,0.9f);
         off = new Color(1,1,1,0.7f);
         for (int i=0;i<2;i++) {
-	selectArea[i] = new MouseOverArea(container, selectImg, 300 + (i * 225) , 50, (AbstractComponent source) -> {
+        	selectArea[i] = new MouseOverArea(container, selectImg, 300 + (i * 225) , 50, (AbstractComponent source) -> {
             for (int j = 0; j < 4; j++) {
                 if(source == selectArea[j]) selector = j;
             }

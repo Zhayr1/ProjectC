@@ -37,7 +37,17 @@ public class OptionMenu extends BasicGameState {
 
 	@Override
 	public void render(GameContainer container, StateBasedGame game, Graphics g) throws SlickException {
-		generarOpciones(container, g);
+		bg.draw(0, 0, width, height);
+		optBg.draw(margen, margen, width-margen*2, height-margen*2);
+		
+		bBtn1.draw(posBtnVolverX, posBtnVolverY);
+		bBtn1.setAlpha(0.6f);
+		
+		g.setColor(Color.black);
+		g.drawString(optTitle, margen+80, margen+20);
+		videoSettings(container, g);
+		audioSettings(container, g);
+		otrosSettings(g);
 	}
 
 	@Override
@@ -59,47 +69,33 @@ public class OptionMenu extends BasicGameState {
 		return 2;
 	}
 	
-	public void generarOpciones(GameContainer container, Graphics g) throws SlickException {
-		bg.draw(0, 0, width, height);
-		optBg.draw(margen, margen, width-margen*2, height-margen*2);
-		
-		bBtn1.draw(posBtnVolverX, posBtnVolverY);
-		bBtn1.setAlpha(0.6f);
-		
-		g.setColor(Color.white);
-		g.drawString(optTitle, margen+80, margen+20);
-		videoSettings(container, g);
-		audioSettings(container, g);
-		otrosSettings(g);
-	}
-	
 	public void videoSettings(GameContainer container, Graphics g) throws SlickException {
 		String opciones = "Video:  Resolucion:\n"
 						+ "        Pantalla completa:\n"
 						+ "        Mostrar FPS: \n";
 		String configuracion = "";
 		
-		configuracion += (int)width+"x"+(int)height+"\n";
+		configuracion += "["+(int)width+"x"+(int)height+"]\n";
 		
 		if(container.isFullscreen()) {
-			configuracion += "Si\n";
+			configuracion += "[Si]\n";
 		} else {
-			configuracion += "No\n";
+			configuracion += "[No]\n";
 		}
 		
 		if(container.isShowingFPS()) {
-			configuracion += "Si";
+			configuracion += "[Si]";
 		} else {
-			configuracion += "No";
+			configuracion += "[No]";
 		}
 		
 		int distancia = 370, altura = 120, alto=16;
 		
 		dibujarSeccion(100, altura, 400, 100, distancia, opciones, configuracion, g);
 
-		g.setColor(Color.lightGray);
 		if((posX >= distancia && posX <= distancia+80) && (posY >= altura+15 && posY <= altura+15+alto)) {
 			g.drawRect(distancia, altura+15, 80, alto);
+			g.drawString("           <", 360, altura+14);
 			
 			if(container.getInput().isMousePressed(0)) {
 				if(width == 800 && height == 600) {
@@ -111,8 +107,9 @@ public class OptionMenu extends BasicGameState {
 				}
 			}
 			
-		} else if ((posX >= distancia && posX <= distancia+22) && (posY >= altura+36 && posY <=altura+36+alto)) {
-			g.drawRect(distancia, altura+36, 22, alto);
+		} else if ((posX >= distancia && posX <= distancia+35) && (posY >= altura+36 && posY <=altura+36+alto)) {
+			g.drawRect(distancia, altura+36, 35, alto);
+			g.drawString("     <", 360, altura+35);
 			
 			if(container.getInput().isMousePressed(0)) {
 				if(container.isFullscreen())
@@ -121,8 +118,9 @@ public class OptionMenu extends BasicGameState {
 					container.setFullscreen(true);
 			}
 			
-		} else if ((posX >= distancia && posX <= distancia+22) && (posY >= altura+57 && posY <=altura+57+alto)) {
-			g.drawRect(distancia, altura+57, 22, alto);
+		} else if ((posX >= distancia && posX <= distancia+35) && (posY >= altura+57 && posY <=altura+57+alto)) {
+			g.drawRect(distancia, altura+57, 35, alto);
+			g.drawString("     <", 360, altura+56);
 			
 			if(container.getInput().isMousePressed(0)) {
 				if(container.isShowingFPS())
@@ -138,8 +136,8 @@ public class OptionMenu extends BasicGameState {
 						+ "        Musica:";
 		String configuracion = "";
 		
-		configuracion += "             "+(int)(container.getMusicVolume()*100f)+" %\n";
-		configuracion += "             "+(int)(container.getMusicVolume()*100f)+" %";
+		configuracion += "            ["+(int)(container.getMusicVolume()*100f)+"%]\n";
+		configuracion += "            ["+(int)(container.getMusicVolume()*100f)+"%]";
 		
 		dibujarSeccion(100, 230, 400, 70, 290, opciones, configuracion, g);
 		audioSlider(250, 290, container, g);
@@ -153,7 +151,7 @@ public class OptionMenu extends BasicGameState {
 		g.fillRect(distancia+(container.getMusicVolume()*100), y-5, 5, 15);
 		
 		if((posX >= distancia && posX <= distancia+100) && (posY >= y-7 && posY <= y+15)) {
-			g.setColor(Color.yellow);
+			g.setColor(Color.white);
 			g.drawRect(distancia+(container.getMusicVolume()*100), y-5, 5, 15);
 			if(container.getInput().isMouseButtonDown(0)) {
 				container.setMusicVolume((posX-distancia)/100f);
@@ -164,13 +162,13 @@ public class OptionMenu extends BasicGameState {
 	public void otrosSettings(Graphics g) {
 		String opciones = "Otros:  Idioma:";
 		
-		String configuracion = "Español";
+		String configuracion = "[Español]";
 		
 		dibujarSeccion(100, 310, 400, 50, 290, opciones, configuracion, g);
 		
-		g.setColor(Color.lightGray);
-		if((posX >= 290 && posX <= 290+70) && (posY >=325 && posY <= 325+18)) {
-			g.drawRect(290, 325, 70, 18);
+		if((posX >= 290 && posX <= 290+80) && (posY >=325 && posY <= 325+18)) {
+			g.drawRect(290, 325, 80, 18);
+			g.drawString("          <", 280, 325);
 			
 		}
 	}

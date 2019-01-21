@@ -5,9 +5,9 @@
  */
 package ProyectCastle.Proyectiles;
 
+import Player.Player;
 import ProyectCastle.Castles.PlayerCastle;
 import ProyectCastle.Game;
-import ProyectCastle.MainApplication;
 import org.newdawn.slick.geom.Circle;
 /**
  *
@@ -38,6 +38,8 @@ public class CannonBallImpl extends Circle implements CannonBall{
     private boolean downright = false;
     private float timer = 1;
     
+    private Player c;
+    
     public CannonBallImpl(float x1, float y1) {
         super(x1, y1, 10);
     }
@@ -46,6 +48,7 @@ public class CannonBallImpl extends Circle implements CannonBall{
     public void shot(int direction,PlayerCastle castle) {
         setNotExploited();
         setActive();
+        c = castle.getPlayer();
         switch(direction){
             case UP:
                 up = true;
@@ -87,42 +90,63 @@ public class CannonBallImpl extends Circle implements CannonBall{
     public void disable() {
         setExploited();
         if(up){
-            if(this.intersects(Game.redCastle) || this.intersects(Game.blueCastle) ){
-                if(this.intersects(Game.redCastle)) Game.redCastle.setDamage(1);
-                if(this.intersects(Game.blueCastle)) Game.blueCastle.setDamage(1);
+            if(this.intersects(Game.castles[0]) || this.intersects(Game.castles[1]) ){
+                if(this.intersects(Game.castles[0])) Game.castles[0].setDamage(1);
+                if(this.intersects(Game.castles[1])) Game.castles[1].setDamage(1);
                 setInactive();
                 resetDirs();
             }
         }
         if(down){
-            if(this.intersects(Game.yellowCastle) || this.intersects(Game.greenCastle) ){
-                if(this.intersects(Game.yellowCastle)) Game.yellowCastle.setDamage(1);
-                if(this.intersects(Game.greenCastle)) Game.greenCastle.setDamage(1);
+            if(this.intersects(Game.castles[2]) || this.intersects(Game.castles[3]) ){
+                if(this.intersects(Game.castles[2])) Game.castles[2].setDamage(1);
+                if(this.intersects(Game.castles[3])) Game.castles[3].setDamage(1);
                 setInactive();
                 resetDirs();
             }
         }
         if(left){
-            if(this.intersects(Game.yellowCastle) || this.intersects(Game.redCastle) ){
-                if(this.intersects(Game.yellowCastle)) Game.yellowCastle.setDamage(1);
-                if(this.intersects(Game.redCastle)) Game.redCastle.setDamage(1);
+            if(this.intersects(Game.castles[2]) || this.intersects(Game.castles[0]) ){
+                if(this.intersects(Game.castles[2])) Game.castles[2].setDamage(1);
+                if(this.intersects(Game.castles[0])) Game.castles[0].setDamage(1);
                     setInactive();
                     resetDirs();
             }
         }
         if(right){
-            if(this.intersects(Game.blueCastle) || this.intersects(Game.greenCastle) ){
-                if(this.intersects(Game.blueCastle))  Game.blueCastle.setDamage(1);
-                if(this.intersects(Game.greenCastle)) Game.greenCastle.setDamage(1);
+            if(this.intersects(Game.castles[1]) || this.intersects(Game.castles[3]) ){
+                if(this.intersects(Game.castles[1]))  Game.castles[1].setDamage(1);
+                if(this.intersects(Game.castles[3])) Game.castles[3].setDamage(1);
                     setInactive();
                     resetDirs();
             }
         }
         if(downleft){
-            if(this.intersects(Game.yellowCastle)){
-                if(this.intersects(Game.yellowCastle)) Game.yellowCastle.setDamage(1);
+            if(this.intersects(Game.castles[2])){
+                if(this.intersects(Game.castles[2])) Game.castles[2].setDamage(1);
                     setInactive();
                     resetDirs();
+            }
+        }
+        if(downright){
+            if(this.intersects(Game.castles[3])){
+                Game.castles[3].setDamage(1);
+                setInactive();
+                resetDirs();
+            }
+        }
+        if(upleft){
+            if(this.intersects(Game.castles[0])){
+                Game.castles[0].setDamage(1);
+                setInactive();
+                resetDirs();
+            }
+        }
+        if(upright){
+            if(this.intersects(Game.castles[1])){
+                Game.castles[1].setDamage(1);
+                setInactive();
+                resetDirs();
             }
         }
     }
@@ -139,24 +163,50 @@ public class CannonBallImpl extends Circle implements CannonBall{
     
     @Override
     public void updatePosition(){
-        if(up){
-            super.setY(y - vel);
-        }else if(down){
-            super.setY(y + vel);
-        }else if(left){
-            super.setX(x - vel);
-        }else if(right){
-            super.setX(x + vel);
-        }else if(upleft){
-            setXY( x - vel , y - vel );
-        }else if(upright){
-            setXY( x - vel , y - vel );
-        }else if(downleft){
-            setXY( x - vel*1.5f , y + vel*0.9f );
-        }else if(downright){
-            setXY( x - vel , y - vel );
+        if(c != null){
+            switch(c.getPosition()){
+                case Player.TL:
+                    if(down){
+                        super.setY(y + vel);
+                    }else if(right){
+                        super.setX(x + vel);
+                    }else if(downright){
+                        setXY( x + (float) 1.5*vel , y + vel );
+                    }
+                    disable();
+                    break;
+                case Player.TR:
+                    if(down){
+                        super.setY(y + vel);
+                    }else if(left){
+                        super.setX(x - vel);
+                    }else if(downleft){
+                        setXY( x - (float) 1.5*vel , y + vel );
+                    }
+                    disable();
+                    break;
+                case Player.BL:
+                    if(up){
+                        super.setY(y - vel);
+                    }else if(right){
+                        super.setX(x + vel);
+                    }else if(upright){
+                        setXY( x + (float) 1.5*vel , y - vel );
+                    }
+                    disable();
+                    break;
+                case Player.BR:
+                    if(up){
+                        super.setY(y - vel);
+                    }else if(left){
+                        super.setX(x - vel);
+                    }else if(upleft){
+                        setXY( x - (float) 1.5*vel , y - vel );
+                    }
+                    disable();
+                    break;
         }
-        disable();
+    }
     }
 
     @Override

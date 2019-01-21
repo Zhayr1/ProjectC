@@ -11,12 +11,15 @@ package Player;
  */
 public class Player {
     
-    public static final int TL = 1;
-    public static final int TR = 2;
-    public static final int BL = 3;
-    public static final int BR = 4;
-    
+    public static final int TL = 0;
+    public static final int TR = 1;
+    public static final int BL = 2;
+    public static final int BR = 3;
+    public static int totalPlayers = 0;
+    private int id;
+    private String name;
     private int position;
+    protected boolean boolBot;
     //1 - Top Left
     //2 - Top Right
     //3 - Bot Left
@@ -24,9 +27,13 @@ public class Player {
     private boolean Up,Down,Left,Right;
     private boolean UpLeft,UpRight,DownLeft,DownRight;
     
-    public Player(){
+    public Player(String name){
         position = 0;
         Up  = UpLeft = Down = Left = Right = false;
+        totalPlayers++;
+        id = totalPlayers;   
+        this.name = name;
+        boolBot = false;
     }
     
     public int getPosition(){
@@ -35,7 +42,9 @@ public class Player {
     public void setPosition(int pos){
         position = pos;
     }
-    
+    public int getID(){
+        return id;
+    }
     
     
     //Setters Booleanos
@@ -112,5 +121,23 @@ public class Player {
     public boolean getRight(){
         return Right;
     }
-    
+    public static int getTotalPlayers(){
+        return totalPlayers;
+    }
+    public String getName(){
+        return name;
+    }
+    public void resetDirs(){
+        this.unsetDown();
+        this.unsetUp();
+        this.unsetLeft();
+        this.unsetRight();
+        this.unsetDownLeft();
+        this.unsetDownRight();
+        this.unsetUpLeft();
+        this.unsetUpRight();
+    }
+    public boolean isBot(){
+        return boolBot;
+    }
 }

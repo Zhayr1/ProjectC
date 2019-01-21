@@ -5,7 +5,7 @@
  */
 package ProyectCastle;
 
-import Player.ComputerPlayer;
+import Player.Bot;
 import Player.Player;
 import ProyectCastle.Castles.PlayerCastle;
 import ProyectCastle.Proyectiles.CannonBallImpl;
@@ -30,13 +30,13 @@ public class Game extends BasicGameState{
     public static int SCREEN_Y = 600;
     public static float gameTime;
     public static String mousex = "",mousey = "";
-    public static PlayerCastle redCastle,blueCastle,greenCastle,yellowCastle;
+    public static PlayerCastle[] castles;
     public static CannonBallImpl[] redCastleBalls,
                                    blueCastleBalls,
                                    greenCastleBalls,
                                    yellowCastleBalls;
-    public static Player player1,player2,player3,player4;
-    private static String hostPosition = "";
+    public static Player[] players;
+    public static int hostPosition = -1;
     private Image background;
     private Image explt1;
     private static boolean bolPause = true; 
@@ -67,18 +67,15 @@ public class Game extends BasicGameState{
     }
     @Override
     public void mouseClicked(int button, int x, int y, int clickCount) {
-        castleShot(redCastle);
-        castleShot(blueCastle);
-        castleShot(yellowCastle);
-        castleShot(greenCastle);
-    }
+        castleShot(castles[0]);
+            }
     @Override
     public void mouseMoved(int oldx, int oldy, int newx, int newy) {
         if(!bolPause){
-            renderDirectionArrowsBasedOnMouse(newx , newy , redCastle.getPlayer());
-            renderDirectionArrowsBasedOnMouse(newx , newy , blueCastle.getPlayer());
-            renderDirectionArrowsBasedOnMouse(newx , newy , yellowCastle.getPlayer());
-            renderDirectionArrowsBasedOnMouse(newx , newy , greenCastle.getPlayer());
+            if(!castles[0].getPlayer().isBot()) renderDirectionArrowsBasedOnMouse(newx , newy , castles[0].getPlayer());
+            if(!castles[1].getPlayer().isBot()) renderDirectionArrowsBasedOnMouse(newx , newy , castles[1].getPlayer());
+            if(!castles[2].getPlayer().isBot()) renderDirectionArrowsBasedOnMouse(newx , newy , castles[2].getPlayer());
+            if(!castles[3].getPlayer().isBot()) renderDirectionArrowsBasedOnMouse(newx , newy , castles[3].getPlayer());
             //Mouse position
             if(newx > 0 && newx < SCREEN_X) mousex = String.valueOf(newx);
             if(newy > 0 && newy < SCREEN_Y) mousey = String.valueOf(newy);
@@ -90,17 +87,13 @@ public class Game extends BasicGameState{
                     case Player.TL:
                         if(newx > 150 && newx < SCREEN_X && newy > 0 && newy < 150){
                             p.setRight();
-                            System.out.println("Set Right");
                         }else{
                             p.unsetRight();
-                            System.out.println("Unset Right");
                         }
-                        if(newx > 0 && newx < 200 && newy > 150 && newy < SCREEN_Y){
+                        if(newx > 0 && newx < 150 && newy > 150 && newy < SCREEN_Y){
                             p.setDown();
-                            System.out.println("Set Down");
                         }else{
                             p.unsetDown();
-                            System.out.println("Unset Down");
                         }
                         if(newx > 150 && newx < SCREEN_X  && newy > 150 && newy < SCREEN_Y ){
                             p.setDownRight();
@@ -208,25 +201,16 @@ public class Game extends BasicGameState{
     }
     @Override
     public void enter(GameContainer container,StateBasedGame game)throws SlickException{
-        System.out.println("Enter stage Game");
-        player1 = new Player();
-        player1.setPosition(Player.TR);
-        blueCastle.setPlayer(player1);
-        System.out.println(player1.getPosition());
-        /*
-        player2 = new ComputerPlayer(Player.TR);
-        player3 = new ComputerPlayer(Player.BL);
-        player4 = new ComputerPlayer(Player.BR);
-        player1.setPosition(Integer.valueOf(hostPosition));
-        redCastle.setPlayer(player1);
-        blueCastle.setPlayer(player2);
-        yellowCastle.setPlayer(player3);
-        greenCastle.setPlayer(player4);*/
+        this.initPlayers();
+        for (int i = 1; i <= 3; i++) {
+            Bot b = (Bot) players[i];
+            b.initBot();
+        }
     }
     @Override
     public void init(GameContainer container, StateBasedGame game) throws SlickException {
-        System.out.println("initGameHere!!");
         //inicializacion de los 4 castillos
+        castles = new PlayerCastle[4];
         this.initCastles();
         //inicializacion de las balas de cañon de los 4 castillos
         this.initCastleBalls();
@@ -239,10 +223,10 @@ public class Game extends BasicGameState{
     public void render(GameContainer container, StateBasedGame game, Graphics g) throws SlickException {
             g.setColor(Color.white);
             background.draw(0,0);
-            redCastle.drawComponents(g);
-            blueCastle.drawComponents(g);
-            yellowCastle.drawComponents(g);
-            greenCastle.drawComponents(g);
+            castles[0].drawComponents(g);
+            castles[1].drawComponents(g);
+            castles[2].drawComponents(g);
+            castles[3].drawComponents(g);
             g.drawString("Mouse X: "+mousex + "\nMouse Y: " + mousey, 5 , 25);
             renderCannonBalls(g);   
     }
@@ -250,14 +234,18 @@ public class Game extends BasicGameState{
     public void update(GameContainer container, StateBasedGame game, int delta) throws SlickException {
         if(!bolPause){
             this.updateCastleBalls();
-            this.destroyCastles(redCastle);
-            this.destroyCastles(blueCastle);
-            this.destroyCastles(yellowCastle);
-            this.destroyCastles(greenCastle);
+            this.destroyCastles(castles[0]);
+            this.destroyCastles(castles[1]);
+            this.destroyCastles(castles[2]);
+            this.destroyCastles(castles[3]);
+            castleShot(castles[1]);
+            castleShot(castles[2]);
+            castleShot(castles[3]);
+
         }
     }
     private void castleShot(PlayerCastle castle){
-        if(castle.getPlayer() != null){
+        if(castle.getPlayer() != null /*&& !castle.getPlayer().isBot()*/){
             if(castle.getPlayer().getUp())     castle.shotCBall(1);        
             if(castle.getPlayer().getDown())   castle.shotCBall(2);
             if(castle.getPlayer().getLeft())   castle.shotCBall(3);
@@ -269,16 +257,16 @@ public class Game extends BasicGameState{
         }
     }
     private void initCastles() throws SlickException{
-        redCastle = new PlayerCastle(0, 0, 150, 150, "Assets/RedCastle.png");
-        blueCastle = new PlayerCastle(SCREEN_X - 150, 0, 150, 150, "Assets/BlueCastle.png");
-        yellowCastle = new PlayerCastle(0, SCREEN_Y - 150, 150, 150, "Assets/YellowCastle.png");
-        greenCastle = new PlayerCastle(SCREEN_X - 150, SCREEN_Y - 150, 150, 150, "Assets/GreenCastle.png");
+        castles[0] = new PlayerCastle(0, 0, 150, 150, "Assets/RedCastle.png");
+        castles[1] = new PlayerCastle(SCREEN_X - 150, 0, 150, 150, "Assets/BlueCastle.png");
+        castles[2] = new PlayerCastle(0, SCREEN_Y - 150, 150, 150, "Assets/YellowCastle.png");
+        castles[3] = new PlayerCastle(SCREEN_X - 150, SCREEN_Y - 150, 150, 150, "Assets/GreenCastle.png");
     }
     private void initCastleBalls(){
-        redCastleBalls    = redCastle.getCBalls();
-        blueCastleBalls   = blueCastle.getCBalls();
-        greenCastleBalls  = greenCastle.getCBalls();
-        yellowCastleBalls = yellowCastle.getCBalls();
+        redCastleBalls    = castles[0].getCBalls();
+        blueCastleBalls   = castles[1].getCBalls();
+        greenCastleBalls  = castles[2].getCBalls();
+        yellowCastleBalls = castles[3].getCBalls();
     }
     private void destroyCastles(PlayerCastle castle){
         if(castle.getHp() <= 0 && !castle.isDestroyed()){
@@ -286,5 +274,40 @@ public class Game extends BasicGameState{
             castle.getImage().setAlpha(0.6f);
         }
         if(castle.getHp() < 0) castle.setHp(0);
+    }
+    public static void setPlayers(Player[] p){
+        players = p;
+    }
+    private void initPlayers(){
+        for (int i = 0; i < 4; i++) {
+            if(players[i] != null){
+                switch(players[0].getPosition()){
+                    case Player.TL:
+                        castles[0].setPlayer(players[0]);
+                        castles[1].setPlayer(players[1]);
+                        castles[2].setPlayer(players[2]);
+                        castles[3].setPlayer(players[3]);
+                        break;
+                    case Player.TR:
+                        castles[0].setPlayer(players[1]);
+                        castles[1].setPlayer(players[0]);
+                        castles[2].setPlayer(players[2]);
+                        castles[3].setPlayer(players[3]);
+                        break;
+                    case Player.BL:
+                        castles[0].setPlayer(players[2]);
+                        castles[1].setPlayer(players[1]);
+                        castles[2].setPlayer(players[0]);
+                        castles[3].setPlayer(players[3]);
+                        break;
+                    case Player.BR:
+                        castles[0].setPlayer(players[3]);
+                        castles[1].setPlayer(players[1]);
+                        castles[2].setPlayer(players[2]);
+                        castles[3].setPlayer(players[0]);
+                        break;
+                }
+            }
+        }
     }
 }

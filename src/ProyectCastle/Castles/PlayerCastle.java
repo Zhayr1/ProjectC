@@ -89,12 +89,8 @@ public class PlayerCastle extends Rectangle implements Castle{
         g.drawString(String.valueOf(hp), this.getX() + castleWidth* 0.45f , this.getY() + castleHeight * 0.45f);
         if(player != null){
             //Dibujar las flechas
-            this.drawDirectionArrows(g);
+            if(!player.isBot()) this.drawDirectionArrows(g);
             //
-                g.drawString("UP: "+ String.valueOf(player.getUp()), 300, 300);
-                g.drawString("DOWN: "+ String.valueOf(player.getDown()), 300, 350);
-                g.drawString("LEFT: "+ String.valueOf(player.getLeft()), 300, 400);
-                g.drawString("RIGHT: "+ String.valueOf(player.getRight()), 300, 450);
         }
     }
     public void setHp(int hp){
@@ -125,10 +121,7 @@ public class PlayerCastle extends Rectangle implements Castle{
         super.setY(y1);
         destroyed = false;
     }
-    private void reInitCannonBalls(){
-        
-    }
-    private void drawDirectionArrows(Graphics g){
+     private void drawDirectionArrows(Graphics g){
         //UP
         if(player.getPosition() == Player.BR || player.getPosition() == Player.BL){
             if(player.getUp()){
@@ -182,10 +175,10 @@ public class PlayerCastle extends Rectangle implements Castle{
         //DOWN-RIGHT
         if(player.getPosition() == Player.TL){
             if(player.getDownRight()){
-                arrowDownRight.draw(this.getX() + 150 , this.getY() + 150);
+                arrowDownRight.draw(this.getX() + 150 , this.getY() + 140);
                 arrowDownRight.setAlpha(1f);
             }else{
-                arrowDownRight.draw(this.getX() + 150, this.getY() + 150);
+                arrowDownRight.draw(this.getX() + 150, this.getY() + 140);
                 arrowDownRight.setAlpha(0.3f);
             }
         }
